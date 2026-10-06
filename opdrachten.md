@@ -2,16 +2,16 @@
 
 > Je werkt **solo**, overleggen met je buren mag en wordt aangemoedigd.
 > Elke opdracht heeft een **hard stopmoment**. Niet klaar? Geen probleem: stap bij de volgende opdracht in via de checkpoint-branch.
-> Kies één repo: **React** (`rockstars-events-react`) of **Angular** (`rockstars-events-angular`). Beide hebben dezelfde app, dezelfde taak en dezelfde valkuilen.
+> Repo: `rockstars-events` (React + een kleine Node-API).
 
 ---
 
 ## Vooraf (thuis, ~10 min)
 
-1. Clone de repo van je keuze
+1. Clone de repo `rockstars-events`
 2. `npm install` (in de root, installeert `web/` en `api/`)
-3. `npm run dev`: de app draait op `http://localhost:5173` (React) / `http://localhost:4200` (Angular), de API op `http://localhost:3000`
-4. Check dat je agent werkt: vraag hem een comment toe te voegen aan `web/src/main.ts(x)` en draai dat terug
+3. `npm run dev`: de app draait op `http://localhost:5173`, de API op `http://localhost:3000`
+4. Check dat je agent werkt: vraag hem een comment toe te voegen aan `web/src/main.tsx` en draai dat terug
 
 ---
 
@@ -91,7 +91,7 @@ git add -A && git diff --cached voor-run                      # volledige diff
 - Wat de agent zelf uit de code haalt ("we use TypeScript"), hoort er niet in.
 - **Claude Code-gebruikers:** Claude leest `AGENTS.md` alleen als er geen `CLAUDE.md` is. Heb je er toch een, zet er dan `@AGENTS.md` in.
 
-**Klaar als:** de agent beantwoordt de testvraag correct (via de API-client in `web/src/api/`, niet met `fetch`/`HttpClient` in een component) en noemt `AGENTS.md` en het juiste docs-bestand.
+**Klaar als:** de agent beantwoordt de testvraag correct (via de API-client in `web/src/api/`, niet met `fetch` in een component) en noemt `AGENTS.md` en het juiste docs-bestand.
 
 **Stretch:** maak een geneste `api/AGENTS.md` met de backend-conventies (validatie, error-format) en een `web/AGENTS.md`. Test of de agent in `api/` het juiste bestand pakt.
 
@@ -127,15 +127,14 @@ git add -A && git diff --cached voor-run                      # volledige diff
    - Copilot: `.github/instructions/testing.instructions.md`
      ```md
      ---
-     applyTo: "**/*.test.tsx,**/*.spec.ts"
+     applyTo: "**/*.test.{ts,tsx}"
      ---
      ```
    - Claude Code: `.claude/rules/testing.md`
      ```md
      ---
      paths:
-       - "**/*.test.tsx"
-       - "**/*.spec.ts"
+       - "**/*.test.{ts,tsx}"
      ---
      ```
 4. **Voeg de rapportage-instructie toe** aan `AGENTS.md`:
@@ -173,7 +172,7 @@ Voorbeelden (in `web/eslint.config.js`):
 
 ```js
 {
-  files: ['src/features/**/*.{ts,tsx}'],          // Angular: '**/*.component.ts'
+  files: ['src/features/**/*.{ts,tsx}'],
   rules: {
     'no-restricted-globals': ['error', {
       name: 'fetch',
@@ -207,7 +206,7 @@ Hex-kleuren in CSS, met Stylelint (`web/.stylelintrc.json`):
 }
 ```
 
-Hex-kleuren in inline styles (React):
+Hex-kleuren in inline styles:
 
 ```js
 'no-restricted-syntax': ['error', {
@@ -216,31 +215,41 @@ Hex-kleuren in inline styles (React):
 }],
 ```
 
-**Angular:** in componenten `HttpClient` verbieden kan met `no-restricted-imports` op `@angular/common/http`, met `files: ['**/*.component.ts']` en een melding die naar de services in `src/api/` verwijst.
-
 Test het: zet bewust een overtreding in een bestand en draai `npm run lint`. Zie je jouw melding?
 
 ### 3.2 Pre-commit hook (6 min)
 
-husky en lint-staged zijn al geïnstalleerd, maar nog niet geconfigureerd.
+lefthook is al geïnstalleerd (als `devDependency`), maar nog niet geconfigureerd. lefthook is één binary met één YAML-config, en draait ook buiten Node-projecten.
+
+Maak in de root `lefthook.yml`:
+
+```yaml
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "web/**/*.{ts,tsx}"
+      run: npm run lint
+    stylelint:
+      glob: "web/**/*.css"
+      run: npm run lint:css
+    typecheck:
+      glob: "web/**/*.{ts,tsx}"
+      run: npm run typecheck
+    test:
+      glob: "web/**/*.{ts,tsx}"
+      run: npm test
+```
+
+Activeer de hooks:
 
 ```bash
-npx husky init                                  # maakt .husky/pre-commit
-echo "npx lint-staged" > .husky/pre-commit
+npx lefthook install
 ```
 
-Maak in de root `lint-staged.config.js`:
+Een command draait alleen als er staged bestanden zijn die matchen met de `glob`. Het hele project linten is in deze kleine repo snel genoeg. In grote projecten geef je met `{staged_files}` alleen de staged bestanden mee (`run: npx eslint {staged_files}`).
 
-```js
-export default {
-  "web/**/*.{ts,tsx,html}": [
-    "eslint --max-warnings=0",
-    () => "npm run typecheck", // functie = één keer voor het hele project
-    () => "npm test",
-  ],
-  "web/**/*.{css,scss}": ["stylelint"],
-};
-```
+Testen zonder te committen: `npx lefthook run pre-commit --all-files`.
 
 Test het: commit een bestand met een overtreding. Wordt de commit geblokkeerd met jouw melding?
 
@@ -281,7 +290,13 @@ Test het: commit een bestand met een overtreding. Wordt de commit geblokkeerd me
     }
     ```
   - Copilot CLI / cloud agent: `.github/hooks/lint.json` met een `postToolUse`-hook (zie de [Copilot hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference)).
-- **commit-msg hook:** dwing Conventional Commits af met commitlint.
+- **commit-msg hook:** dwing Conventional Commits af met commitlint. In `lefthook.yml`:
+    ```yaml
+    commit-msg:
+      commands:
+        commitlint:
+          run: npx commitlint --edit {1}
+    ```
 
 **Vastgelopen?** `git switch stap-3-enforce`
 
@@ -315,17 +330,17 @@ Test het: commit een bestand met een overtreding. Wordt de commit geblokkeerd me
 ```md
 # Scorecard
 
-Repo: React / Angular Agent + model: ******\_\_******
+Agent + model: ******\_\_******
 
 Meest verrassende fout bij baseline: **************\_\_**************
 
 | #   | Conventie                                                                | Hoe check je het?                                                                                                                                                  | Baseline | Rules | Enforce |
 | --- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ----- | ------- |
 | 1   | Kleuren/spacing via tokens (`tokens.css`, `var(--rs-*)`)                 | `git add -A && git diff --cached voor-run -- web \| grep -E '^\+.*(#[0-9a-fA-F]{3,8}\b\|rgb\(\|[0-9]+px\|theme)'` + bestaan gebruikte tokens echt in `tokens.css`? |          |       |         |
-| 2   | Data via `src/api/` (geen `fetch` / `HttpClient` in component)           | `git add -A && git diff --cached voor-run -- web/src/features \| grep -E '^\+.*(fetch\(\|HttpClient)'`                                                             |          |       |         |
+| 2   | Data via `src/api/` (geen `fetch` in component)           | `git add -A && git diff --cached voor-run -- web/src/features \| grep -E '^\+.*fetch\('`                                                             |          |       |         |
 | 3   | UI-componenten uit `src/ui/` (Button, Input, Card)                       | Diff lezen: native `<button>`/`<input>` met eigen styling?                                                                                                         |          |       |         |
 | 4   | Geen nieuwe dependencies (utils uit `src/lib/`, bv. `formatEventMoment`) | `git diff voor-run -- '*package.json'`                                                                                                                             |          |       |         |
-| 5   | Alle UI-teksten via i18n                                                 | Diff lezen: hardcoded tekst in JSX/template? Nieuwe keys in `locales/`?                                                                                            |          |       |         |
+| 5   | Alle UI-teksten via i18n                                                 | Diff lezen: hardcoded tekst in JSX? Nieuwe keys in `locales/`?                                                                                            |          |       |         |
 | 6   | Tests: `getByRole`/`getByLabelText`, gecoloceerd                         | `... \| grep -E 'getByTestId\|data-testid'` + staat de test naast de component (niet in `__tests__/`)?                                                             |          |       |         |
 | 7   | Nieuwe code in de juiste feature-map (niet in `src/components/`)         | `git add -A && git diff --cached voor-run --stat`                                                                                                                  |          |       |         |
 | 8   | a11y: labels bij inputs, echte buttons, toggle met `aria-pressed`        | Diff lezen: `<div onClick` / `(click)` op div? input zonder label? favoriet-knop zonder `aria-pressed`/label?                                                      |          |       |         |
@@ -344,21 +359,22 @@ Meest verrassende fout bij baseline: **************\_\_**************
 
 ## Repo-specificatie (input voor het genereren van de oefen-repo's)
 
-> Deze sectie is voor de trainer. Op basis hiervan worden de twee repo's later gegenereerd.
+> Deze sectie is voor de trainer. Op basis hiervan wordt de repo later gegenereerd.
 
 ### Algemeen
 
-- **Twee aparte repo's:** `rockstars-events-react` en `rockstars-events-angular`. Hetzelfde domein, dezelfde feature-taak, dezelfde geplante conventies en valkuilen. Aparte repo's, zodat de agent de andere variant niet als context gebruikt.
+- **Eén repo:** `rockstars-events`, met React.
 - **Domein:** "Rockstars Events": een overzicht van events (meetups, workshops, talks) met lijst, detailpagina, favorieten en een profielpagina.
-- **Monorepo-opzet per repo:** npm workspaces met `web/` en `api/`. Root-scripts:
+- **Monorepo-opzet:** npm workspaces met `web/` en `api/`. Root-scripts:
   - `dev` (web + api tegelijk)
-  - `lint`
+  - `lint` (ESLint)
+  - `lint:css` (Stylelint)
   - `typecheck`
   - `test`
 - **Taal in de repo:** Engels (code, docs, comments).
 - **Klein houden:** ~25–35 bronbestanden in `web/`, zodat deelnemers in 10 min een beeld hebben.
 
-### `web/` (React)
+### `web/`
 
 - Vite + React 19 + TypeScript `strict`
 - React Router
@@ -368,17 +384,7 @@ Meest verrassende fout bij baseline: **************\_\_**************
 - Stylelint met basisconfig **zonder** `color-no-hex`
 - Prettier
 
-### `web/` (Angular)
-
-- Angular (actuele versie), standalone components, signals
-- Angular Router
-- ngx-translate
-- Vitest (of Jest) + @testing-library/angular
-- angular-eslint **zonder** restricted-rules
-- Stylelint basisconfig
-- Prettier
-
-### `api/` (beide repo's gelijk)
+### `api/`
 
 - Node + Express (of Hono) + TypeScript, data in-memory (JSON-seed)
 - Endpoints:
@@ -407,7 +413,7 @@ Een agent volgt (1) de code die het dichtst bij de taak staat, (2) zijn training
 ### `web/src/features/profile/` (reference)
 
 - Profielpagina: naam, taalvoorkeur, favoriete categorieën, opslaan via de API
-- Gebruikt: tokens, `useProfile`-hook / `ProfileService` via `api/`, `ui/Button` + `ui/Input` + `ui/Card`, `formatEventMoment` ("member since"), i18n, een gecoloceerde test met `getByRole`/`getByLabelText`, `aria-*` correct
+- Gebruikt: tokens, `useProfile`-hook via `api/`, `ui/Button` + `ui/Input` + `ui/Card`, `formatEventMoment` ("member since"), i18n, een gecoloceerde test met `getByRole`/`getByLabelText`, `aria-*` correct
 - API-endpoints erbij: `GET /profile`, `PUT /profile`
 
 ### Geplante conventies + hoe de agent het fout gaat doen
@@ -415,11 +421,11 @@ Een agent volgt (1) de code die het dichtst bij de taak staat, (2) zijn training
 | #   | Conventie (de waarheid)                                                                        | Goed voorbeeld (`profile/`, gedeeld)                                                                                                                                                                    | Lokkertje (`events/`, legacy)                                                                                                                                                                                                                                                                   |
 | --- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | Kleuren/spacing/radius alleen via tokens in `web/src/styles/tokens.css`                        | Tokens met **niet-raadbare namen**: `--rs-ink-*`, `--rs-surface-*`, `--rs-brand-pop` (= accent), `--rs-space-1..6`, `--rs-radius-*`, plus een dark-mode-variant. Geen token heet `accent` of `primary`. | `web/src/styles/theme.ts` (deprecated, maar nog geïmporteerd door `events/`) met hex-constanten zoals `ACCENT = '#ff4f6d'`. `events/`-CSS heeft hex-kleuren en px-spacing. De taak vraagt de "accent color", dus de agent verzint `var(--color-accent)`, zet een hex, of importeert `theme.ts`. |
-| 2   | Data alleen via `web/src/api/` (React: `apiClient` + hooks / Angular: services op `ApiClient`) | `useProfile` / `ProfileService`, met een loading/error-patroon                                                                                                                                          | `EventList` doet zelf `fetch('/api/events')` (Angular: `HttpClient` direct in de component). Een hook/service voor favorieten bestaat **nog niet**, dus de agent bouwt hem naar het voorbeeld ernaast.                                                                                          |
+| 2   | Data alleen via `web/src/api/` (`apiClient` + hooks) | `useProfile`, met een loading/error-patroon                                                                                                                                          | `EventList` doet zelf `fetch('/api/events')`. Een hook voor favorieten bestaat **nog niet**, dus de agent bouwt hem naar het voorbeeld ernaast.                                                                                          |
 | 3   | UI-componenten uit `web/src/ui/` (uitbreiden als iets ontbreekt)                               | `ui/Button` (variants), `ui/Input` (label is verplichte prop), `ui/Card`                                                                                                                                | `events/` gebruikt native `<button className="btn">`. `ui/Button` heeft **geen toggle-variant**: de juiste aanpak is `ui/` uitbreiden (`pressed`-prop), het lokkertje is een eigen knop.                                                                                                        |
 | 4   | Geen nieuwe dependencies, utils in `web/src/lib/`                                              | `web/src/lib/time.ts` met `formatEventMoment(date, 'compact' \| 'full')`. `'compact'` geeft precies "Tue 14 Oct, 19:00". Gebruikt in `profile/`.                                                        | `events/` formatteert handmatig met `toLocaleDateString` + string-concatenatie. De gevraagde notatie lokt `date-fns`/`dayjs` uit.                                                                                                                                                               |
-| 5   | Alle UI-teksten via i18n                                                                       | `profile/` + header gebruiken `t('…')` / `\| translate`, keys in `web/src/locales/en.json` + `nl.json`, taalwisselaar in de header                                                                      | `events/` heeft hardcoded Engelse strings                                                                                                                                                                                                                                                       |
-| 6   | Tests gecoloceerd, `getByRole`/`getByLabelText`, geen test-ids                                 | `ProfileForm.test.tsx` / `profile-form.component.spec.ts` naast de component                                                                                                                            | `web/src/features/events/__tests__/EventList.test.tsx` met `getByTestId` + `data-testid` in de markup                                                                                                                                                                                           |
+| 5   | Alle UI-teksten via i18n                                                                       | `profile/` + header gebruiken `t('…')`, keys in `web/src/locales/en.json` + `nl.json`, taalwisselaar in de header                                                                      | `events/` heeft hardcoded Engelse strings                                                                                                                                                                                                                                                       |
+| 6   | Tests gecoloceerd, `getByRole`/`getByLabelText`, geen test-ids                                 | `ProfileForm.test.tsx` naast de component                                                                                                                            | `web/src/features/events/__tests__/EventList.test.tsx` met `getByTestId` + `data-testid` in de markup                                                                                                                                                                                           |
 | 7   | Feature-folders: `features/<naam>/`, gedeeld in `ui/`, `lib/`, `api/`                          | `features/profile/`, `features/favorites/` (leeg, alleen `index.ts`)                                                                                                                                    | Legacy-map `web/src/components/` met `Header.tsx` en `Spinner.tsx`. De favorieten-teller in de header belandt daar makkelijk, of in `events/`.                                                                                                                                                  |
 | 8   | a11y: echte buttons/links, labels, toggle met `aria-pressed`                                   | `ui/Input` dwingt een label af, `ui/Button` is een `<button>`                                                                                                                                           | De legacy event-card heeft `<div className="card" onClick>` voor de detail-navigatie. Een favoriet-toggle zonder `aria-pressed`/label is de standaardfout.                                                                                                                                      |
 
@@ -453,8 +459,8 @@ Een agent volgt (1) de code die het dichtst bij de taak staat, (2) zijn training
 - `CONTRIBUTING.md` + `README.md`: zie valkuil-versterkers
 - `.gitignore` bevat `SCORECARD.md`
 - **Geen** `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.github/instructions/`, `.claude/`, `.cursorrules` of `docs/ai/`
-- `.github/workflows/ci.yml`: `npm ci`, `lint`, `typecheck`, `test`
-- husky + lint-staged in root-`devDependencies`, **niet** geïnitialiseerd (geen `.husky/`, geen lint-staged-config)
+- `.github/workflows/ci.yml`: `npm ci`, `lint`, `lint:css`, `typecheck`, `test`
+- lefthook in root-`devDependencies`, **niet** geconfigureerd (geen `lefthook.yml`, hooks niet geïnstalleerd)
 
 ### Checkpoint-branches (voorbeeldoplossingen)
 
@@ -462,7 +468,7 @@ Een agent volgt (1) de code die het dichtst bij de taak staat, (2) zijn training
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `stap-1-agents-md` | `AGENTS.md` (~60 regels) met index, en de regel "Reference implementation: `features/profile/`. `features/events/` is legacy, do not copy its patterns." Plus `docs/ai/styling.md` (met tokentabel: welke token voor welk doel, incl. `--rs-brand-pop` = accent), `docs/ai/data-fetching.md`, `docs/ai/testing.md`, `docs/ai/components.md` |
 | `stap-2-rules`     | + rules met ID's (STYLE-01, DATA-01, UI-01, DEPS-01, I18N-01, TEST-01, A11Y-01, STRUCT-01), path-scoped test-rule in alle drie de vormen, `Reporting`-sectie                                                                                                                                                                                |
-| `stap-3-enforce`   | + ESLint restricted-rules met instructieve meldingen (`fetch`/`HttpClient` in features, `date-fns`/`moment`/`dayjs`, import van `theme.ts`, hex in inline styles), Stylelint `color-no-hex`, husky + lint-staged geconfigureerd, never-do `--no-verify`, voorbeeld-agent hook voor Claude Code en Copilot                                   |
+| `stap-3-enforce`   | + ESLint restricted-rules met instructieve meldingen (`fetch` in features, `date-fns`/`moment`/`dayjs`, import van `theme.ts`, hex in inline styles), Stylelint `color-no-hex`, `lefthook.yml` geconfigureerd, never-do `--no-verify`, voorbeeld-agent hook voor Claude Code en Copilot                                   |
 
 ### Kalibratie (vóór de workshop, verplicht)
 
@@ -478,4 +484,5 @@ Een agent volgt (1) de code die het dichtst bij de taak staat, (2) zijn training
 - `npm install && npm run dev` werkt op een schone machine (Node LTS)
 - `npm run lint`, `typecheck` en `test` zijn groen op `main` (dus de legacy-code is wel lint-clean onder de basisconfig)
 - De kalibratie haalt de streefwaarden hierboven
+- Controleer dat `npm install` op `main` geen `lefthook.yml` en geen git hooks aanmaakt. Het npm-package van lefthook kan bij installatie automatisch `lefthook install` draaien. Gebeurt dat, pas dan de setup aan of laat de opdrachttekst er rekening mee houden.
 - Op `stap-3-enforce` blokkeert de pre-commit hook een commit met een hex-kleur, met `fetch` in een feature-component, en met een `date-fns`-import

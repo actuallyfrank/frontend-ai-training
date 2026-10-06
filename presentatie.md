@@ -1,6 +1,6 @@
 # Presentatie: Context engineering voor front-end developers
 
-> **Doelgroep:** 12 front-end/full-stack developers (React of Angular), ervaren met Claude Code / GitHub Copilot en plan mode, weinig ervaring met context engineering.
+> **Doelgroep:** 12 front-end/full-stack developers, ervaren met Claude Code / GitHub Copilot en plan mode, weinig ervaring met context engineering.
 > **Duur:** ~2 uur (middagdeel). Presentatie (~53 min) en opdrachten (~67 min) wisselen elkaar af.
 > **Vorm:** fysiek, iedereen solo achter de laptop, overleggen mag.
 > **Leesinstructie:** per slide: **titel**, bullets (de slide-inhoud), *Notities* (wat de spreker vertelt). Scenariovragen hebben het antwoord in de notities. `> [EIGEN VOORBEELD]` = plek voor een praktijkverhaal van de trainer.
@@ -47,7 +47,7 @@
 *Notities:* Herkenbaar beeld. Vraag aan de zaal: "Wie heeft de agent deze week iets gecorrigeerd dat hij vorige week ook al fout deed?" Handen tellen. Dat is het probleem van vandaag.
 
 ### Slide 0.4: Doe dit nu: start je baseline
-1. Open de repo (React óf Angular)
+1. Open de repo `rockstars-events`
 2. Kopieer `SCORECARD.template.md` naar `SCORECARD.md`
 3. `git tag -f voor-run`
 4. Open een **verse** agent-sessie, plak de inhoud van `TASK.md`, druk op enter
@@ -188,7 +188,7 @@ Copy patterns from `web/src/features/profile/`.
 
 ## Docs index (read the relevant file before you start)
 - docs/ai/styling.md: tokens, theming, spacing
-- docs/ai/data-fetching.md: API client, hooks/services, error states
+- docs/ai/data-fetching.md: API client, hooks, error states
 - docs/ai/testing.md: Testing Library, query priorities
 - docs/ai/components.md: ui/ library, a11y, i18n
 ```
@@ -217,7 +217,7 @@ Wat een agent niet uit de code haalt, maar jij wel weet:
 - Test-filosofie (Testing Library: query by role)
 - Browser support, performance-budget
 
-*Notities:* Dit is waar ze als front-end developer het verschil maken. De agent kent React/Angular beter dan wie dan ook, maar weet niet welke keuzes júllie gemaakt hebben en waarom.
+*Notities:* Dit is waar ze als front-end developer het verschil maken. De agent kent React beter dan wie dan ook, maar weet niet welke keuzes júllie gemaakt hebben en waarom.
 
 ### Slide 2.7: Laat de agent helpen, maar review als een PR
 - `/init` (Claude) of de agent vragen "analyseer deze repo en stel een AGENTS.md voor"
@@ -305,19 +305,18 @@ Why: we support dark mode and white-label themes; hardcoded values break both.
 | Aanpak | Hoe |
 |---|---|
 | **Tool-onafhankelijk** | `docs/ai/testing.md` + index in AGENTS.md |
-| **GitHub Copilot** | `.github/instructions/testing.instructions.md` met frontmatter `applyTo: "**/*.test.tsx,**/*.spec.ts"` |
+| **GitHub Copilot** | `.github/instructions/testing.instructions.md` met frontmatter `applyTo: "**/*.test.{ts,tsx}"` |
 | **Claude Code** | `.claude/rules/testing.md` met frontmatter `paths:` (lijst met globs) |
 
 ```md
 ---
-applyTo: "**/*.test.tsx,**/*.spec.ts"      # Copilot
+applyTo: "**/*.test.{ts,tsx}"      # Copilot
 ---
 ```
 ```md
 ---
 paths:                                     # Claude Code
-  - "**/*.test.tsx"
-  - "**/*.spec.ts"
+  - "**/*.test.{ts,tsx}"
 ---
 ```
 
@@ -435,7 +434,7 @@ Why: consistent styling, focus states and a11y are built into ui/.
 - **TypeScript strict**
 - **Architectuurgrenzen**: `eslint-plugin-boundaries`, dependency-cruiser
 - **Tests**
-- **Git hooks**: husky + lint-staged / lefthook
+- **Git hooks**: lefthook (of husky)
 - **CI** als laatste poort
 
 **Werkt voor elke agent, elke tool, elke collega, en voor jezelf.**
@@ -465,7 +464,7 @@ Why: consistent styling, focus states and a11y are built into ui/.
 - Schrijf meldingen als **instructie**: wat moet het wél zijn, en waar staat de uitleg?
 - De agent leest de melding en corrigeert zichzelf
 
-*Notities:* "Unexpected use of fetch" is een melding voor mensen die het al weten. "Use a hook from web/src/api/ (see …)" is een instructie, waarmee de lint-fout zelf context wordt. Voor kleuren in CSS: Stylelint `"color-no-hex": [true, { "message": "Use var(--rs-*) from tokens.css (see docs/ai/styling.md)" }]`. Angular-variant: dezelfde aanpak met angular-eslint, met `files` op `*.ts` en `*.html`.
+*Notities:* "Unexpected use of fetch" is een melding voor mensen die het al weten. "Use a hook from web/src/api/ (see …)" is een instructie, waarmee de lint-fout zelf context wordt. Voor kleuren in CSS: Stylelint `"color-no-hex": [true, { "message": "Use var(--rs-*) from tokens.css (see docs/ai/styling.md)" }]`.
 
 ### Slide 4.6: Defense in depth
 ```
@@ -473,7 +472,7 @@ editor (ESLint plugin)
    ↓
 agent hook (optioneel, draait dezelfde lint)
    ↓
-git pre-commit (husky + lint-staged)
+git pre-commit (lefthook)
    ↓
 CI (dezelfde checks, kan niet overgeslagen worden)
 ```
@@ -503,7 +502,7 @@ CI (dezelfde checks, kan niet overgeslagen worden)
 
 ### Slide 3o.1: Opdracht 3: enforce it
 1. Zet een objectief checkbare rule om naar een **lint rule** met een instructieve melding
-2. Configureer de **pre-commit hook** (husky + lint-staged, al geïnstalleerd)
+2. Configureer de **pre-commit hook** (lefthook, al geïnstalleerd)
 3. Commit, `git tag -f voor-run`, verse sessie: laat de agent `TASK.md` uitvoeren **én committen**
 4. Zie je de hook falen → de agent die zichzelf herstelt? Scorecard kolom **enforce**
 
