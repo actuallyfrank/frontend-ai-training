@@ -58,11 +58,11 @@ The legacy shop must violate conventions yet pass lint/typecheck/test on `main`.
 - ESLint flat config (typescript-eslint, react-hooks) and Stylelint (`stylelint-config-standard`) at base level only.
 - Prettier.
 - `concurrently` for `npm run dev`.
-- `lefthook` as devDependency with its auto-install disabled. The repo sets `LEFTHOOK=0` for the install script or relies on lefthook doing nothing without a config. Which one applies is verified in tasks; if lefthook would create a default config, the `postinstall` behaviour is neutralised.
+- **No `lefthook` on `main`.** The npm package runs `lefthook install` on postinstall, which creates an example `lefthook.yml` and installs git hooks (even into a parent repo). That would pre-solve exercise 3. Participants run `npm install -D lefthook` themselves in exercise 3; the `stap-3-enforce` checkpoint adds it (package.json + lockfile + `lefthook.yml`). While developing inside this workshop repo, installs run with `CI=true` so the postinstall never touches the parent repo's hooks.
 - CI is a single GitHub Actions job on Node LTS.
 
 ### D8a: Legacy-vs-rules conflict is an exercise, not a design decision
-Adding the exercise-3 rules makes the existing legacy shop fail lint, so a whole-project pre-commit hook blocks every commit. This is deliberately **not** solved in the repo or the instructions. Participants work out their own approach (and the trainer can discuss options afterwards). Only the `stap-3-enforce` checkpoint needs *a* working example so stragglers can continue. Which example is a trainer choice made when building that overlay; it is not prescribed by the specs.
+Adding the exercise-3 rules makes the existing legacy shop fail lint, so a whole-project pre-commit hook blocks every commit. This is deliberately **not** solved in the repo or the instructions. Participants work out their own approach (and the trainer can discuss options afterwards). Only the `stap-3-enforce` checkpoint needs *a* working example so stragglers can continue. Which example is a trainer choice made when building that overlay; it is not prescribed by the specs. **Chosen: bulk suppressions** (`eslint --suppress-all`, `stylelint --suppress`): `web/eslint-suppressions.json` and `web/stylelint-suppressions.json` record the existing legacy violations per file and rule, so lint is green while any *new* violation (including an extra one in a legacy file) still fails. Stylelint marks suppressions as experimental and prints a warning; that is acceptable for a checkpoint.
 
 ### D8: Calibration happens on the exported repo
 Running agents inside this workshop repo would leak context (`.claude/skills`, `.agents/`, OpenSpec files, the workshop materials themselves describing the lures). Calibration runs are therefore performed only on a fresh export in a directory outside this repo.
@@ -72,7 +72,7 @@ Running agents inside this workshop repo would leak context (`.claude/skills`, `
 - [Agents behave differently per model/version, so lures may be too weak or too strong] → mandatory calibration (workshop-setup spec) with documented tuning knobs per convention; recalibrate shortly before the workshop.
 - [Participants' personal instructions/memory improve the baseline] → pre-workshop mail asks to disable them; discussed as a learning point if it happens.
 - [Overlay drift: a later change to `main` breaks a checkpoint (e.g. a renamed file referenced in `AGENTS.md`)] → the export script runs lint/typecheck/test on every branch and fails loudly.
-- [Lefthook postinstall unexpectedly installs hooks] → explicit acceptance check after `npm install` on a clean clone.
+- [Lefthook postinstall installs hooks and an example config wherever it is installed] → not a dependency on `main`; acceptance check that a clean `npm install` creates no `lefthook.yml` and no git hooks; `CI=true` for installs inside this workshop repo.
 - [The legacy code is "too obviously bad" and feels rigged] → keep legacy realistic (working, tested, TODO comment), and keep everything else clean.
 - [Port conflicts on participants' machines (5173/3000)] → ports configurable via env, documented in README.
 
@@ -91,4 +91,3 @@ Rollback = re-export a previous commit of this repo.
 
 - Final distribution location (GitHub org/repo name and visibility) can be decided at push time; it doesn't affect the build.
 - Exact Dutch flavour texts can be polished after the first build.
-- Which worked example `stap-3-enforce` uses for the legacy-vs-rules conflict (trainer choice at build time, see D8a). It only affects the content of that overlay.

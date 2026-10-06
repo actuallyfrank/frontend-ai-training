@@ -1,0 +1,1 @@
+export { ClickerPage } from './ClickerPage';

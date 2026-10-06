@@ -62,7 +62,7 @@ The repo root SHALL contain `TASK.md` (the shop filter + wishlist ticket, produc
 - **THEN** `SCORECARD.md` still exists
 
 ### Requirement: Tooling state
-The repo SHALL provide root scripts `dev`, `lint`, `lint:css`, `typecheck` and `test`, all passing on `main`. ESLint and Stylelint SHALL be configured without the restrictive rules participants add in the workshop (no restricted globals/imports/syntax, no `color-no-hex`). `lefthook` SHALL be installed as a dev dependency but SHALL NOT be configured, and `npm install` SHALL NOT create a lefthook config or git hooks. A CI workflow SHALL run lint, lint:css, typecheck and test.
+The repo SHALL provide root scripts `dev`, `lint`, `lint:css`, `typecheck` and `test`, all passing on `main`. ESLint and Stylelint SHALL be configured without the restrictive rules participants add in the workshop (no restricted globals/imports/syntax, no `color-no-hex`). No git-hook tooling SHALL be installed or configured: `lefthook` SHALL NOT be a dependency (participants install and configure it themselves in exercise 3), and `npm install` SHALL NOT create a lefthook config or git hooks. A CI workflow SHALL run lint, lint:css, typecheck and test.
 
 #### Scenario: Green baseline
 - **WHEN** a participant runs `npm install` and then `npm run lint && npm run lint:css && npm run typecheck && npm test` on `main`
@@ -70,7 +70,7 @@ The repo SHALL provide root scripts `dev`, `lint`, `lint:css`, `typecheck` and `
 
 #### Scenario: Hooks not active
 - **WHEN** a participant runs `npm install` on a fresh clone
-- **THEN** no `lefthook.yml` exists and `.git/hooks` contains no active lefthook hooks
+- **THEN** `lefthook` is not in any `package.json`, no `lefthook.yml` exists and `.git/hooks` contains only git's sample hooks
 
 #### Scenario: Dev start
 - **WHEN** a participant runs `npm run dev`

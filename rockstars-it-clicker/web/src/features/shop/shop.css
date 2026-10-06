@@ -1,0 +1,62 @@
+.shop-title {
+  font-size: 32px;
+  text-transform: uppercase;
+}
+
+.shop-category {
+  margin-bottom: 24px;
+}
+
+.shop-category-title {
+  margin: 0 0 12px;
+  color: #919191;
+  font-size: 18px;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.upgrade-card {
+  padding: 12px;
+  border: 2px solid #232323;
+  border-radius: 10px;
+  background: #232323;
+  cursor: pointer;
+  user-select: none;
+}
+
+.upgrade-card:hover {
+  background: #3d3d3d;
+}
+
+.upgrade-card-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.upgrade-owned {
+  color: #919191;
+  font-size: 12px;
+}
+
+.upgrade-flavour {
+  margin: 8px 0;
+  color: #919191;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.upgrade-price {
+  font-family: monospace;
+  font-size: 15px;
+}
+
+.spinner {
+  padding: 24px;
+  color: #919191;
+  text-align: center;
+}

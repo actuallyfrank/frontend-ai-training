@@ -1,0 +1,11 @@
+.rs-card {
+  padding: var(--rs-space-4);
+  border: 2px solid var(--rs-stage-600);
+  border-radius: var(--rs-radius-md);
+  background: var(--rs-stage-700);
+}
+
+.rs-card--highlighted {
+  border-color: var(--rs-spotlight);
+  box-shadow: var(--rs-shadow-glow);
+}

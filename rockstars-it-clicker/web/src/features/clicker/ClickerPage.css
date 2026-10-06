@@ -1,0 +1,45 @@
+.clicker__title {
+  margin: 0;
+  font-family: var(--rs-font-display);
+  font-size: var(--rs-text-hero);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.clicker__panels {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--rs-space-4);
+}
+
+.clicker__heading {
+  margin: 0 0 var(--rs-space-3);
+  font-size: var(--rs-text-lg);
+}
+
+.clicker__stats {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--rs-space-2) var(--rs-space-4);
+  margin: 0;
+}
+
+.clicker__stats dt {
+  color: var(--rs-amp-300);
+}
+
+.clicker__stats dd {
+  margin: 0;
+  font-family: var(--rs-font-mono);
+  text-align: right;
+}
+
+.clicker__team {
+  margin: 0;
+  padding-left: var(--rs-space-4);
+}
+
+.clicker__empty {
+  margin: 0;
+  color: var(--rs-amp-300);
+}

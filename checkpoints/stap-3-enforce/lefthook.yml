@@ -1,0 +1,16 @@
+# Git hooks for everyone (humans and agents). Install once with: npx lefthook install
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "{web,api}/**/*.{ts,tsx}"
+      run: npm run lint
+    stylelint:
+      glob: "web/**/*.css"
+      run: npm run lint:css
+    typecheck:
+      glob: "{web,api}/**/*.{ts,tsx}"
+      run: npm run typecheck
+    test:
+      glob: "{web,api}/**/*.{ts,tsx,json}"
+      run: npm test

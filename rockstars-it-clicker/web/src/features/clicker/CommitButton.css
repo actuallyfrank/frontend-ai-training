@@ -1,0 +1,34 @@
+.commit-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: var(--rs-space-6) 0;
+}
+
+.commit-button__pop {
+  position: absolute;
+  top: var(--rs-space-4);
+  color: var(--rs-encore);
+  font-family: var(--rs-font-display);
+  font-size: var(--rs-text-lg);
+  pointer-events: none;
+  animation: commit-pop 700ms ease-out forwards;
+}
+
+@keyframes commit-pop {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(calc(-1 * var(--rs-space-6)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .commit-button__pop {
+    animation-duration: 1ms;
+  }
+}

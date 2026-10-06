@@ -1,0 +1,92 @@
+{
+  "app": {
+    "name": "Rockstars IT Clicker",
+    "loading": "Je bedrijf wordt opgestart…",
+    "loadError": "De server is niet bereikbaar. Draait de API? Start alles met npm run dev."
+  },
+  "nav": {
+    "label": "Hoofdnavigatie",
+    "game": "Spel",
+    "shop": "Winkel",
+    "profile": "Profiel"
+  },
+  "header": {
+    "loc": "{{value}} LoC",
+    "locPerSecond": "{{value}} LoC/s",
+    "language": "Taal"
+  },
+  "languages": {
+    "en": "English",
+    "nl": "Nederlands"
+  },
+  "categories": {
+    "people": "Mensen",
+    "tools": "Tools",
+    "culture": "Cultuur",
+    "infra": "Infra"
+  },
+  "clicker": {
+    "title": "Schrijf wat code",
+    "commit": "Commit",
+    "commitLabel": "Code committen (+{{amount}} LoC)",
+    "gained": "+{{amount}}",
+    "stats": {
+      "title": "Statistieken",
+      "loc": "Lines of Code",
+      "locPerSecond": "LoC per seconde",
+      "clickPower": "LoC per klik"
+    },
+    "team": {
+      "title": "Je team",
+      "empty": "Nog niemand aan boord. Ga naar de winkel en neem je eerste stagiair aan!",
+      "item": "{{name}} × {{count}}"
+    }
+  },
+  "profile": {
+    "title": "Bedrijfsprofiel",
+    "companyName": "Bedrijfsnaam",
+    "avatar": "Avatar",
+    "language": "Taal",
+    "save": "Profiel opslaan",
+    "saving": "Bezig met opslaan…",
+    "saved": "Profiel opgeslagen. Rock on!",
+    "errors": {
+      "companyName": "Gebruik 2 tot 40 tekens.",
+      "load": "Je profiel kon niet worden geladen.",
+      "save": "Opslaan is mislukt. Probeer het opnieuw."
+    },
+    "avatars": {
+      "guitar": "Gitaar",
+      "drums": "Drums",
+      "microphone": "Microfoon",
+      "keys": "Keyboard"
+    },
+    "stats": {
+      "title": "Statistieken",
+      "playingFor": "Speeltijd",
+      "totalLoc": "LoC geschreven",
+      "upgrades": "Upgrades in bezit"
+    }
+  },
+  "common": {
+    "loading": "Laden…"
+  },
+  "upgrades": {
+    "intern": { "name": "Stagiair", "flavour": "Kopieert van Stack Overflow, maar wel snel." },
+    "junior-dev": { "name": "Junior Dev", "flavour": "Vraagt elke vier minuten: \"Mag ik even wat vragen?\"" },
+    "medior-dev": { "name": "Medior Dev", "flavour": "Weet precies waar de lijken in de codebase begraven liggen." },
+    "senior-dev": { "name": "Senior Dev", "flavour": "Zegt \"het hangt ervan af\" en heeft altijd gelijk." },
+    "rockstar": { "name": "Rockstar", "flavour": "Deployt op vrijdagmiddag. Er gaat niks stuk." },
+    "tech-lead": { "name": "Tech Lead", "flavour": "Zit vooral in meetings, en is toch productief." },
+    "rubber-duck": { "name": "Badeend", "flavour": "Luistert zonder te oordelen." },
+    "mechanical-keyboard": { "name": "Mechanisch toetsenbord", "flavour": "Klik-klak. Je collega's zijn er dol op." },
+    "second-monitor": { "name": "Tweede monitor", "flavour": "Eén voor code, één voor Slack." },
+    "ai-pair-programmer": { "name": "AI Pair Programmer", "flavour": "Schrijft 1.000 regels. Jij verwijdert er 900." },
+    "coffee-machine": { "name": "Koffiemachine", "flavour": "Brandstof. Niet aankomen tijdens de stand-up." },
+    "ping-pong-table": { "name": "Pingpongtafel", "flavour": "Productiviteit: twijfelachtig. Moraal: uitstekend." },
+    "friday-drinks": { "name": "Vrijdagmiddagborrel", "flavour": "De beste architectuurbeslissingen vallen om 17:30." },
+    "ci-pipeline": { "name": "CI-pipeline", "flavour": "Groen is gaan. Rood is koffie halen." },
+    "kubernetes-cluster": { "name": "Kubernetes-cluster", "flavour": "Niemand snapt hoe het werkt. Het werkt." },
+    "serverless": { "name": "Serverless", "flavour": "Er zijn nog steeds servers. Niet verder vertellen." }
+  }
+}

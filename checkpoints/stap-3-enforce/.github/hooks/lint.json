@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "node scripts/lint-edited-file.mjs",
+        "timeoutSec": 60
+      }
+    ]
+  }
+}

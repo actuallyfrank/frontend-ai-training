@@ -1,0 +1,44 @@
+@import url('./tokens.css');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--rs-stage-900);
+  color: var(--rs-amp-100);
+  font-family: var(--rs-font-body);
+  font-size: var(--rs-text-md);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--rs-signal);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--rs-focus-ring);
+}
+
+.app-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--rs-space-5) var(--rs-space-4);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -1,0 +1,55 @@
+.rs-button {
+  display: inline-flex;
+  gap: var(--rs-space-2);
+  align-items: center;
+  justify-content: center;
+  padding: var(--rs-space-2) var(--rs-space-4);
+  border: 2px solid transparent;
+  border-radius: var(--rs-radius-pill);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 80ms ease,
+    background-color 120ms ease;
+}
+
+.rs-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rs-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.rs-button--primary {
+  background: var(--rs-spotlight);
+  color: var(--rs-spotlight-ink);
+}
+
+.rs-button--secondary {
+  border-color: var(--rs-spotlight);
+  background: transparent;
+  color: var(--rs-amp-100);
+}
+
+.rs-button--ghost {
+  background: transparent;
+  color: var(--rs-amp-300);
+}
+
+.rs-button--ghost:hover:not(:disabled) {
+  color: var(--rs-amp-100);
+}
+
+.rs-button--hero {
+  padding: var(--rs-space-5) var(--rs-space-6);
+  background: var(--rs-spotlight);
+  box-shadow: var(--rs-shadow-glow);
+  color: var(--rs-spotlight-ink);
+  font-family: var(--rs-font-display);
+  font-size: var(--rs-text-xl);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}

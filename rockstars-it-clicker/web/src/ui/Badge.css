@@ -1,0 +1,12 @@
+.rs-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5em;
+  padding: 0 var(--rs-space-2);
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-spotlight);
+  color: var(--rs-spotlight-ink);
+  font-size: var(--rs-text-sm);
+  font-weight: 700;
+}

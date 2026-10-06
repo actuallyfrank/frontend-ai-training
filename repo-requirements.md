@@ -22,7 +22,7 @@ Daarom is dit een codebase **midden in een migratie**, net als echte projecten:
 
 ## 2. Concept: Rockstars IT Clicker
 
-Een idle/cookie-clicker: je bouwt een IT-bedrijf op door *Lines of Code* (LoC) te schrijven. Je huurt developers in, koopt tools en infra, en investeert in bedrijfscultuur. Speels, herkenbare IT-humor, rock/concert-uitstraling.
+Een idle/cookie-clicker: je bouwt een IT-bedrijf op door *Lines of Code* (LoC) te schrijven. Je huurt developers in, koopt tools en infra, en investeert in bedrijfscultuur. Speels, herkenbare IT-humor, in de **Team Rockstars-huisstijl** (geel `#ffe000` op zwart/`#232323`, Permanent Marker voor koppen).
 
 ### Gameplay (light idle)
 - **Commit-knop** (groot, midden op het scherm): +`clickPower` LoC per klik (start: 1). Kleine "+1"-animatie.
@@ -73,7 +73,7 @@ Auth, multiplayer (behalve de bonus), offline progress, prestige, random events,
 | Lint | ESLint flat config + typescript-eslint + react-hooks, **zonder** restricted-rules. Stylelint met `stylelint-config-standard`, **zonder** `color-no-hex`. Prettier |
 | Backend | Node + Express + TypeScript + Zod, in-memory store met JSON-seed (reset bij herstart is ok). Draaien via `tsx watch` |
 | Tests (api) | Vitest + supertest (een paar route-tests) |
-| Git hooks | `lefthook` in root-devDependencies, **niet** geconfigureerd |
+| Git hooks | **Geen.** Deelnemers installeren en configureren `lefthook` zelf in opdracht 3 (`npm install -D lefthook`). Het npm-package draait bij installatie `lefthook install`, dat een voorbeeldconfig en hooks aanmaakt, dus het mag niet al in de repo zitten |
 | CI | `.github/workflows/ci.yml`: `npm ci`, `npm run lint`, `npm run lint:css`, `npm run typecheck`, `npm test` |
 
 **Root-scripts:**
@@ -83,7 +83,7 @@ Auth, multiplayer (behalve de bonus), offline progress, prestige, random events,
 - `typecheck`: `tsc --noEmit`, web + api
 - `test`: web + api
 
-**Poorten:** web `5173`, api `3000`. Vite proxy: `/api` → `http://localhost:3000`.
+**Poorten:** web `5173`, api `3000` (gebonden aan `127.0.0.1`, zodat een bezette poort een duidelijke fout geeft in plaats van stil bij een ander proces uit te komen). Vite proxy: `/api` → `http://127.0.0.1:3000`. Te overschrijven met `WEB_PORT` / `API_PORT`.
 
 ---
 
@@ -98,7 +98,7 @@ rockstars-it-clicker/
 ├── SCORECARD.template.md
 ├── .gitignore                    # incl. SCORECARD.md
 ├── .github/workflows/ci.yml
-├── package.json                  # workspaces + scripts + lefthook devDep
+├── package.json                  # workspaces + scripts (geen lefthook)
 ├── web/
 │   ├── index.html
 │   ├── vite.config.ts            # proxy /api
@@ -181,10 +181,11 @@ rockstars-it-clicker/
   - Lijst gegroepeerd per categorie, met hardcoded koppen: "People", "Tools", "Culture", "Infra".
 - `UpgradeCard.tsx`:
   - `<div className="upgrade-card" onClick={() => onBuy(upgrade.id)} data-testid="upgrade-card">`, dus kopen via een div zonder keyboard-support.
-  - Toont `upgrade.name` (het deprecated API-veld) en een hardcoded "Owned: {n}".
+  - Toont `upgrade.name` (het deprecated API-veld), een eigen hardcoded Engelse flavour-map (`shop/flavours.ts`, dubbel met de locales) en een hardcoded "Owned: {n}".
+  - Berekent de prijs zelf (`Math.ceil(baseCost * Math.pow(1.15, owned))`) in plaats van `priceOf()` uit `lib/game`.
   - Prijs handmatig geformatteerd: `price >= 1e6 ? (price / 1e6).toFixed(1) + 'M' : price >= 1e3 ? ...`
   - Inline style `style={{ opacity: affordable ? 1 : 0.5, borderColor: affordable ? COLORS.accent : COLORS.muted }}`, met `COLORS` uit `styles/theme.ts`.
-- `shop.css`: hex-kleuren (`#1c1a2e`, `#ff2e63`, …) en px-spacing (`padding: 12px`).
+- `shop.css`: hex-kleuren (`#232323`, `#919191`, …) en px-spacing (`padding: 12px`).
 - `__tests__/ShopPage.test.tsx`: mockt `global.fetch` en gebruikt `getByTestId('upgrade-card')`.
 - Bovenaan `ShopPage.tsx`: `// TODO: migrate to new patterns (see features/profile)`. **Niet** "do not copy".
 - Lint-clean onder de basisconfig, dus CI is groen.
@@ -233,7 +234,7 @@ rockstars-it-clicker/
 
 | # | Conventie (de waarheid) | Goed voorbeeld | Lokkertje |
 |---|---|---|---|
-| 1 | Kleuren, spacing en radius alleen via `web/src/styles/tokens.css` | Rock-tokens met **niet-raadbare namen** (zie §7). Geen token heet `accent`, `primary` of `color-*` | `styles/theme.ts` (`@deprecated`) met `COLORS.accent = '#ff2e63'`, nog geïmporteerd door shop. `shop.css` vol hex/px. De TASK vraagt de "spotlight color": de agent verzint `var(--color-spotlight)`, zet een hex, of importeert `COLORS` |
+| 1 | Kleuren, spacing en radius alleen via `web/src/styles/tokens.css` | Rock-tokens met **niet-raadbare namen** (zie §7). Geen token heet `accent`, `primary` of `color-*` | `styles/theme.ts` (`@deprecated`) met `COLORS.accent = '#ffe000'`, nog geïmporteerd door shop. `shop.css` vol hex/px. De TASK vraagt de "spotlight color": de agent verzint `var(--color-spotlight)`, zet een hex, of importeert `COLORS` |
 | 2 | Data alleen via `web/src/api/` (client + hooks) | `useProfile`, `useSaveGame` | `ShopPage` doet zelf `fetch`. Er is geen wishlist-hook |
 | 3 | UI-componenten uit `web/src/ui/` (uitbreiden als iets ontbreekt) | `Button`, `Input`, `Select`, `Card` (`highlighted`!) in clicker/profile | Shop gebruikt eigen divs en buttons. `Button` mist een toggle-variant |
 | 4 | Geen nieuwe dependencies, utils in `web/src/lib/` | `compact()`, `humanizeSeconds()`, gebruikt in profile en clicker | Shop formatteert handmatig. "1.2M" en "2m 30s" lokken `numeral` / `pretty-ms` / `humanize-duration` / `date-fns` uit |
@@ -250,27 +251,33 @@ rockstars-it-clicker/
 
 ---
 
-## 7. Design tokens (rock/concert-thema)
+## 7. Design tokens (Team Rockstars-huisstijl)
 
-`web/src/styles/tokens.css`, met dark als standaard ("on stage") en een light-variant via `@media (prefers-color-scheme: light)` ("soundcheck"):
+Kleuren komen uit de huisstijl van teamrockstars.nl (`--awb-color1..8` in hun CSS): zwart `#000`, antraciet `#232323`, grijs `#919191` / `#e3e3e3`, wit, **geel `#ffe000`** (accent), lichtgeel `#ffef80`, blauw `#00a8ea`. Feedbackkleuren: groen `#4a8356`, rood `#c80000`. Fonts: DIN 2014 (Typekit, met licentie; alleen gebruikt als hij lokaal geïnstalleerd is, anders Arial/Helvetica) en Permanent Marker (Google Fonts) voor koppen.
 
-| Token | Gebruik | Dark (standaard) |
-|---|---|---|
-| `--rs-stage-900` | app-achtergrond | `#0f0d1a` |
-| `--rs-stage-800` | panelen | `#17142a` |
-| `--rs-stage-700` | cards | `#211d3a` |
-| `--rs-amp-100` | primaire tekst | `#f4f1ff` |
-| `--rs-amp-300` | secundaire tekst | `#a69fc7` |
-| `--rs-spotlight` | **accent** (highlights, focus, primary button) | `#ff2e63` |
-| `--rs-spotlight-soft` | accent-achtergrond | `rgb(255 46 99 / 15%)` |
-| `--rs-encore` | succes / betaalbaar | `#2ee6a6` |
-| `--rs-pyro` | fout / waarschuwing | `#ffb02e` |
-| `--rs-space-1..6` | spacing | 4 / 8 / 12 / 16 / 24 / 32 px |
-| `--rs-radius-sm/md/pill` | radius | 4px / 10px / 999px |
-| `--rs-font-display` | koppen, LoC-teller | een "rock"-font met system fallback |
+`web/src/styles/tokens.css`, met dark als standaard ("on stage") en een light-variant via `@media (prefers-color-scheme: light)` ("soundcheck"). De tokennamen blijven bewust niet-raadbaar:
 
-- De hex-waarden staan **alleen** in `tokens.css`. Stylelint wordt in opdracht 3 zo ingesteld dat `tokens.css` uitgezonderd is van `color-no-hex`.
-- `theme.ts` (legacy) bevat dezelfde waarden als losse hex-constanten.
+| Token | Gebruik | Dark (standaard) | Light |
+|---|---|---|---|
+| `--rs-stage-900` | app-achtergrond | `#000` | `#fff` |
+| `--rs-stage-800` | panelen, header | `#161616` | `#f5f5f5` |
+| `--rs-stage-700` | cards | `#232323` | `#fff` |
+| `--rs-stage-600` | randen | `#3d3d3d` | `#e3e3e3` |
+| `--rs-amp-100` | primaire tekst | `#fff` | `#232323` |
+| `--rs-amp-300` | secundaire tekst | `#e3e3e3` | `#4d4d4d` |
+| `--rs-amp-500` | gedempte tekst | `#919191` | `#919191` |
+| `--rs-spotlight` | **accent** (highlights, focus, primary button) | `#ffe000` | `#ffe000` |
+| `--rs-spotlight-soft` | accent-achtergrond | `rgb(255 224 0 / 15%)` | `/ 25%` |
+| `--rs-spotlight-ink` | tekst op geel | `#232323` | `#232323` |
+| `--rs-encore` | succes / betaalbaar | `#6dbb7c` | `#4a8356` |
+| `--rs-pyro` | fout / waarschuwing | `#ff6b6b` | `#c80000` |
+| `--rs-signal` | info, links | `#00a8ea` | `#0079a8` |
+| `--rs-space-1..6` | spacing | 4 / 8 / 12 / 16 / 24 / 32 px | |
+| `--rs-radius-sm/md/pill` | radius | 2px / 4px / 999px | |
+| `--rs-font-body` / `--rs-font-display` | tekst / koppen | DIN 2014 → Arial / Permanent Marker | |
+
+- De hex-waarden staan **alleen** in `tokens.css` (plus de legacy-bestanden `theme.ts` en `shop.css`). Stylelint wordt in opdracht 3 zo ingesteld dat `tokens.css` uitgezonderd is van `color-no-hex`.
+- `theme.ts` (legacy) bevat dezelfde huisstijlkleuren als losse hex-constanten.
 
 ---
 
@@ -361,7 +368,7 @@ As a player I want to see how my company ranks against my colleagues.
 |---|---|
 | `stap-1-agents-md` | `AGENTS.md` (~60 regels): commands, structuur, top-conventies, never-do, docs-index, en *"Reference implementation: `web/src/features/profile/`. `web/src/features/shop/` is legacy (migration in progress): do not copy its patterns."* Plus `docs/ai/styling.md` (tokentabel: welke token waarvoor, `--rs-spotlight` = accent, `Card highlighted`), `docs/ai/data-fetching.md`, `docs/ai/components.md` (ui/, a11y, i18n), `docs/ai/testing.md`. Optioneel `api/AGENTS.md` |
 | `stap-2-rules` | + rules met ID's: STYLE-01, DATA-01, UI-01, DEPS-01, I18N-01, TEST-01, A11Y-01, STRUCT-01. De test-rule path-scoped in alle drie de vormen (`docs/ai/testing.md`, `.github/instructions/testing.instructions.md`, `.claude/rules/testing.md`). `Reporting`-sectie (Applied rules) |
-| `stap-3-enforce` | + ESLint: `no-restricted-globals` (`fetch` in `src/features/**`), `no-restricted-imports` (`numeral`, `pretty-ms`, `humanize-duration`, `date-fns`, `**/styles/theme`), `no-restricted-syntax` (hex-literals). Stylelint: `color-no-hex` (behalve `tokens.css`). Alle meldingen als instructie met verwijzing naar het doc. `lefthook.yml` (pre-commit: lint, lint:css, typecheck, test). Never-do `--no-verify`. Voorbeeld-agent hooks: `.claude/settings.json` (PostToolUse eslint) en `.github/hooks/lint.json` |
+| `stap-3-enforce` | + ESLint: `no-restricted-globals` (`fetch` in `src/features/**`), `no-restricted-imports` (`numeral`, `pretty-ms`, `humanize-duration`, `date-fns`, `**/styles/theme`), `no-restricted-syntax` (hex-literals). Stylelint: `color-no-hex` (behalve `tokens.css`). Ook `no-restricted-syntax` voor klikbare divs en `getByTestId` in tests. Alle meldingen als instructie (rule-ID + wat wél + doc). **Legacy-voorbeeld (keuze trainer): bulk suppressions**: `web/eslint-suppressions.json` en `web/stylelint-suppressions.json` leggen de bestaande overtredingen vast, nieuwe overtredingen falen wél. `lefthook` als devDependency + `lefthook.yml` (pre-commit: lint, lint:css, typecheck, test). Never-do: `--no-verify` en suppressions uitbreiden. Agent hooks: `.claude/settings.json` (PostToolUse) en `.github/hooks/lint.json` (postToolUse), beide via `scripts/lint-edited-file.mjs` |
 
 ---
 
@@ -380,7 +387,7 @@ As a player I want to see how my company ranks against my colleagues.
 
 - [ ] `npm install && npm run dev` werkt op een schone machine (Node LTS). Het spel is speelbaar in de browser
 - [ ] `npm run lint`, `lint:css`, `typecheck` en `test` zijn groen op `main` (de legacy-code is lint-clean onder de basisconfig)
-- [ ] `npm install` maakt geen `lefthook.yml` of git hooks aan (controleer het postinstall-gedrag van lefthook)
+- [ ] `lefthook` staat in geen enkele `package.json`, en `npm install` maakt geen `lefthook.yml` of git hooks aan
 - [ ] Alle 8 lokkertjes uit §6 zijn aanwezig. Het goede voorbeeld per conventie is aanwezig in profile/clicker/ui/lib
 - [ ] Savegame, wishlist en profiel blijven bewaard over een page reload (zolang de API draait)
 - [ ] Een Junior Dev is binnen ~2 minuten klikken te kopen

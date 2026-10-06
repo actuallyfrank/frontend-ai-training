@@ -1,0 +1,92 @@
+{
+  "app": {
+    "name": "Rockstars IT Clicker",
+    "loading": "Booting up your company…",
+    "loadError": "Could not reach the server. Is the API running? Start everything with npm run dev."
+  },
+  "nav": {
+    "label": "Main navigation",
+    "game": "Game",
+    "shop": "Shop",
+    "profile": "Profile"
+  },
+  "header": {
+    "loc": "{{value}} LoC",
+    "locPerSecond": "{{value}} LoC/s",
+    "language": "Language"
+  },
+  "languages": {
+    "en": "English",
+    "nl": "Nederlands"
+  },
+  "categories": {
+    "people": "People",
+    "tools": "Tools",
+    "culture": "Culture",
+    "infra": "Infra"
+  },
+  "clicker": {
+    "title": "Write some code",
+    "commit": "Commit",
+    "commitLabel": "Commit code (+{{amount}} LoC)",
+    "gained": "+{{amount}}",
+    "stats": {
+      "title": "Stats",
+      "loc": "Lines of Code",
+      "locPerSecond": "LoC per second",
+      "clickPower": "LoC per click"
+    },
+    "team": {
+      "title": "Your team",
+      "empty": "Nobody here yet. Visit the shop to hire your first intern!",
+      "item": "{{name}} × {{count}}"
+    }
+  },
+  "profile": {
+    "title": "Company profile",
+    "companyName": "Company name",
+    "avatar": "Avatar",
+    "language": "Language",
+    "save": "Save profile",
+    "saving": "Saving…",
+    "saved": "Profile saved. Rock on!",
+    "errors": {
+      "companyName": "Use 2 to 40 characters.",
+      "load": "Could not load your profile.",
+      "save": "Saving failed. Please try again."
+    },
+    "avatars": {
+      "guitar": "Guitar",
+      "drums": "Drums",
+      "microphone": "Microphone",
+      "keys": "Keys"
+    },
+    "stats": {
+      "title": "Stats",
+      "playingFor": "Playing for",
+      "totalLoc": "LoC written",
+      "upgrades": "Upgrades owned"
+    }
+  },
+  "common": {
+    "loading": "Loading…"
+  },
+  "upgrades": {
+    "intern": { "name": "Intern", "flavour": "Copies from Stack Overflow, but fast." },
+    "junior-dev": { "name": "Junior Dev", "flavour": "Asks \"quick question?\" every four minutes." },
+    "medior-dev": { "name": "Medior Dev", "flavour": "Knows where the bodies are buried in the codebase." },
+    "senior-dev": { "name": "Senior Dev", "flavour": "Says \"it depends\" and is always right." },
+    "rockstar": { "name": "Rockstar", "flavour": "Deploys on Friday. Nothing breaks." },
+    "tech-lead": { "name": "Tech Lead", "flavour": "Mostly in meetings, still somehow productive." },
+    "rubber-duck": { "name": "Rubber Duck", "flavour": "Listens without judging." },
+    "mechanical-keyboard": { "name": "Mechanical Keyboard", "flavour": "Clackety-clack. Your colleagues love it." },
+    "second-monitor": { "name": "Second Monitor", "flavour": "One for code, one for Slack." },
+    "ai-pair-programmer": { "name": "AI Pair Programmer", "flavour": "Writes 1,000 lines. You delete 900." },
+    "coffee-machine": { "name": "Coffee Machine", "flavour": "Fuel. Do not touch during stand-up." },
+    "ping-pong-table": { "name": "Ping-Pong Table", "flavour": "Productivity: questionable. Morale: excellent." },
+    "friday-drinks": { "name": "Friday Drinks", "flavour": "The best architecture decisions happen at 17:30." },
+    "ci-pipeline": { "name": "CI Pipeline", "flavour": "Green means go. Red means coffee." },
+    "kubernetes-cluster": { "name": "Kubernetes Cluster", "flavour": "Nobody knows how it works. It works." },
+    "serverless": { "name": "Serverless", "flavour": "There are still servers. Don't tell anyone." }
+  }
+}

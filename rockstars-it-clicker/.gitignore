@@ -1,0 +1,9 @@
+node_modules
+dist
+coverage
+*.log
+.DS_Store
+.env.local
+
+# Workshop: your personal scorecard survives `git reset --hard && git clean -fd`
+SCORECARD.md

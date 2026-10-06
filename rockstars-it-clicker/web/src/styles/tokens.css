@@ -1,0 +1,72 @@
+/*
+ * Design tokens for Rockstars IT Clicker, based on the Team Rockstars house style
+ * (yellow on black). Default theme: "on stage" (dark). Light theme: "soundcheck".
+ */
+:root {
+  /* Stage: backgrounds */
+  --rs-stage-900: #000;
+  --rs-stage-800: #161616;
+  --rs-stage-700: #232323;
+  --rs-stage-600: #3d3d3d;
+
+  /* Amp: text */
+  --rs-amp-100: #fff;
+  --rs-amp-300: #e3e3e3;
+  --rs-amp-500: #919191;
+
+  /* Spotlight: the accent colour (highlights, focus, primary actions) */
+  --rs-spotlight: #ffe000;
+  --rs-spotlight-soft: rgb(255 224 0 / 15%);
+  --rs-spotlight-ink: #232323;
+
+  /* Feedback */
+  --rs-encore: #6dbb7c; /* success, affordable */
+  --rs-pyro: #ff6b6b; /* warning, error */
+  --rs-signal: #00a8ea; /* info, links */
+
+  /* Spacing */
+  --rs-space-1: 4px;
+  --rs-space-2: 8px;
+  --rs-space-3: 12px;
+  --rs-space-4: 16px;
+  --rs-space-5: 24px;
+  --rs-space-6: 32px;
+
+  /* Radius */
+  --rs-radius-sm: 2px;
+  --rs-radius-md: 4px;
+  --rs-radius-pill: 999px;
+
+  /* Type */
+  --rs-font-body: din-2014, arial, helvetica, sans-serif;
+  --rs-font-display: 'Permanent Marker', din-2014, arial, sans-serif;
+  --rs-font-mono: ui-monospace, 'SF Mono', menlo, monospace;
+  --rs-text-sm: 0.875rem;
+  --rs-text-md: 1rem;
+  --rs-text-lg: 1.25rem;
+  --rs-text-xl: 2rem;
+  --rs-text-hero: 3rem;
+
+  /* Effects */
+  --rs-shadow-glow: 0 0 24px var(--rs-spotlight-soft);
+  --rs-focus-ring: 0 0 0 3px var(--rs-spotlight);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --rs-stage-900: #fff;
+    --rs-stage-800: #f5f5f5;
+    --rs-stage-700: #fff;
+    --rs-stage-600: #e3e3e3;
+    --rs-amp-100: #232323;
+    --rs-amp-300: #4d4d4d;
+    --rs-amp-500: #919191;
+    --rs-spotlight: #ffe000;
+    --rs-spotlight-soft: rgb(255 224 0 / 25%);
+    --rs-spotlight-ink: #232323;
+    --rs-encore: #4a8356;
+    --rs-pyro: #c80000;
+    --rs-signal: #0079a8;
+    --rs-focus-ring: 0 0 0 3px #232323;
+  }
+}

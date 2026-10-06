@@ -1,0 +1,26 @@
+{
+  "name": "rockstars-it-clicker",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Rockstars IT Clicker: an idle clicker game. Write Lines of Code, hire devs, scale to production.",
+  "type": "module",
+  "workspaces": [
+    "web",
+    "api"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev -w api\" \"npm run dev -w web\"",
+    "lint": "npm run lint --workspaces",
+    "lint:css": "npm run lint:css -w web",
+    "typecheck": "npm run typecheck --workspaces",
+    "test": "npm test --workspaces",
+    "format": "prettier --write ."
+  },
+  "engines": {
+    "node": ">=20.19"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "prettier": "^3.9.9"
+  }
+}

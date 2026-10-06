@@ -1,0 +1,25 @@
+{
+  "src/features/shop/ShopPage.tsx": {
+    "no-restricted-globals": {
+      "count": 1
+    }
+  },
+  "src/features/shop/UpgradeCard.tsx": {
+    "no-restricted-imports": {
+      "count": 1
+    },
+    "no-restricted-syntax": {
+      "count": 1
+    }
+  },
+  "src/features/shop/__tests__/ShopPage.test.tsx": {
+    "no-restricted-syntax": {
+      "count": 3
+    }
+  },
+  "src/styles/theme.ts": {
+    "no-restricted-syntax": {
+      "count": 6
+    }
+  }
+}

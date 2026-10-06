@@ -1,0 +1,30 @@
+.rs-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--rs-space-1);
+}
+
+.rs-field__label {
+  color: var(--rs-amp-300);
+  font-size: var(--rs-text-sm);
+  font-weight: 600;
+}
+
+.rs-field__control {
+  padding: var(--rs-space-2) var(--rs-space-3);
+  border: 1px solid var(--rs-stage-600);
+  border-radius: var(--rs-radius-md);
+  background: var(--rs-stage-800);
+  color: var(--rs-amp-100);
+  font: inherit;
+}
+
+.rs-field__control[aria-invalid='true'] {
+  border-color: var(--rs-pyro);
+}
+
+.rs-field__error {
+  margin: 0;
+  color: var(--rs-pyro);
+  font-size: var(--rs-text-sm);
+}

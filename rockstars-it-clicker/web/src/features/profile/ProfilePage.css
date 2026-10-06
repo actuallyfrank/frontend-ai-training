@@ -1,0 +1,34 @@
+.profile__title {
+  font-family: var(--rs-font-display);
+  font-size: var(--rs-text-xl);
+  text-transform: uppercase;
+}
+
+.profile__layout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--rs-space-4);
+  align-items: start;
+}
+
+.profile__heading {
+  margin: 0 0 var(--rs-space-3);
+  font-size: var(--rs-text-lg);
+}
+
+.profile__stats {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--rs-space-2) var(--rs-space-4);
+  margin: 0;
+}
+
+.profile__stats dt {
+  color: var(--rs-amp-300);
+}
+
+.profile__stats dd {
+  margin: 0;
+  font-family: var(--rs-font-mono);
+  text-align: right;
+}

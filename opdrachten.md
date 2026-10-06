@@ -10,7 +10,7 @@
 
 1. Clone de repo `rockstars-it-clicker`
 2. `npm install` (in de root, installeert `web/` en `api/`)
-3. `npm run dev`: de app draait op `http://localhost:5173`, de API op `http://localhost:3000`
+3. `npm run dev`: de app draait op `http://localhost:5173`, de API op `http://127.0.0.1:3000`. Is een poort bezet? Start dan met `WEB_PORT=5174 API_PORT=3001 npm run dev`
 4. Check dat je agent werkt: vraag hem een comment toe te voegen aan `web/src/main.tsx` en draai dat terug
 
 ---
@@ -222,9 +222,13 @@ Test het: zet bewust een overtreding in een bestand en draai `npm run lint`. Zie
 
 ### 3.2 Pre-commit hook (6 min)
 
-lefthook is al geïnstalleerd (als `devDependency`), maar nog niet geconfigureerd. lefthook is één binary met één YAML-config, en draait ook buiten Node-projecten.
+lefthook is één binary met één YAML-config, en draait ook buiten Node-projecten. Installeer het in de root van de repo:
 
-Maak in de root `lefthook.yml`:
+```bash
+npm install -D lefthook
+```
+
+Bij de installatie maakt lefthook een voorbeeld-`lefthook.yml` aan. Vervang de inhoud door:
 
 ```yaml
 pre-commit:
@@ -333,9 +337,9 @@ Test het: commit een bestand met een overtreding. Wordt de commit geblokkeerd me
 ```md
 # Scorecard
 
-Agent + model: ******\_\_******
+Agent + model: …
 
-Meest verrassende fout bij baseline: **************\_\_**************
+Meest verrassende fout bij baseline: …
 
 | #   | Conventie                                                                | Hoe check je het?                                                                                                                                                  | Baseline | Rules | Enforce |
 | --- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ----- | ------- |
@@ -351,11 +355,13 @@ Meest verrassende fout bij baseline: **************\_\_**************
 
 ## Geclaimd maar niet gedaan (opdracht 2)
 
-- Rule-ID: \_**\_ Claim: ****\_\_\_\_****** Werkelijkheid: ******\_\_****** Hypothese waarom: ******\_\_******
+- Rule-ID: … · Claim: … · Werkelijkheid: … · Hypothese waarom: …
 
 ## Opdracht 3: wat gebeurde er bij de commit?
 
-- Hook faalde? ja / nee Agent herstelde zelf? ja / nee Probeerde `--no-verify`? ja / nee
+- Hook faalde? ja / nee
+- Agent herstelde zelf? ja / nee
+- Probeerde `--no-verify`? ja / nee
 ```
 
 ---

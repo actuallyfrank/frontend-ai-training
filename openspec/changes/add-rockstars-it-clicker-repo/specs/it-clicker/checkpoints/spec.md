@@ -21,7 +21,7 @@ Branch `stap-2-rules` SHALL add, on top of checkpoint 1, rules with IDs STYLE-01
 - **THEN** its final message contains an "Applied rules:" section listing rule IDs and files
 
 ### Requirement: Checkpoint 3 – enforcement
-Branch `stap-3-enforce` SHALL add, on top of checkpoint 2: ESLint rules forbidding `fetch` in feature code, imports of `numeral`, `pretty-ms`, `humanize-duration`, `date-fns` and the deprecated theme file, and hex colour literals; Stylelint `color-no-hex` (except in the tokens file); a `lefthook.yml` pre-commit running lint, lint:css, typecheck and test; a never-use-`--no-verify` rule in `AGENTS.md`; and example agent hooks for Claude Code and GitHub Copilot that run ESLint after edits. All lint messages SHALL be phrased as instructions referencing the relevant `docs/ai/` file.
+Branch `stap-3-enforce` SHALL add, on top of checkpoint 2: ESLint rules forbidding `fetch` in feature code, imports of `numeral`, `pretty-ms`, `humanize-duration`, `date-fns` and the deprecated theme file, and hex colour literals; Stylelint `color-no-hex` (except in the tokens file); `lefthook` as a dev dependency with a `lefthook.yml` pre-commit running lint, lint:css, typecheck and test; a never-use-`--no-verify` rule in `AGENTS.md`; and example agent hooks for Claude Code and GitHub Copilot that run ESLint after edits. All lint messages SHALL be phrased as instructions referencing the relevant `docs/ai/` file.
 
 #### Scenario: Commit with hex colour blocked
 - **WHEN** a participant on `stap-3-enforce` (with `npx lefthook install` run) commits a feature CSS file containing `#ff2e63`

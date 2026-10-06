@@ -1,0 +1,25 @@
+{
+  "upgrades": [
+    { "id": "intern", "category": "people", "name": "Intern", "baseCost": 15, "locPerSecond": 0.1, "clickPower": 0 },
+    { "id": "junior-dev", "category": "people", "name": "Junior Dev", "baseCost": 100, "locPerSecond": 1, "clickPower": 0 },
+    { "id": "medior-dev", "category": "people", "name": "Medior Dev", "baseCost": 1100, "locPerSecond": 8, "clickPower": 0 },
+    { "id": "senior-dev", "category": "people", "name": "Senior Dev", "baseCost": 12000, "locPerSecond": 47, "clickPower": 0 },
+    { "id": "rockstar", "category": "people", "name": "Rockstar", "baseCost": 130000, "locPerSecond": 260, "clickPower": 0 },
+    { "id": "tech-lead", "category": "people", "name": "Tech Lead", "baseCost": 1400000, "locPerSecond": 1400, "clickPower": 0 },
+    { "id": "rubber-duck", "category": "tools", "name": "Rubber Duck", "baseCost": 50, "locPerSecond": 0, "clickPower": 1 },
+    { "id": "mechanical-keyboard", "category": "tools", "name": "Mechanical Keyboard", "baseCost": 500, "locPerSecond": 0, "clickPower": 2 },
+    { "id": "second-monitor", "category": "tools", "name": "Second Monitor", "baseCost": 5000, "locPerSecond": 20, "clickPower": 0 },
+    { "id": "ai-pair-programmer", "category": "tools", "name": "AI Pair Programmer", "baseCost": 50000, "locPerSecond": 150, "clickPower": 0 },
+    { "id": "coffee-machine", "category": "culture", "name": "Coffee Machine", "baseCost": 200, "locPerSecond": 2, "clickPower": 0 },
+    { "id": "ping-pong-table", "category": "culture", "name": "Ping-Pong Table", "baseCost": 3000, "locPerSecond": 15, "clickPower": 0 },
+    { "id": "friday-drinks", "category": "culture", "name": "Friday Drinks", "baseCost": 30000, "locPerSecond": 120, "clickPower": 0 },
+    { "id": "ci-pipeline", "category": "infra", "name": "CI Pipeline", "baseCost": 20000, "locPerSecond": 90, "clickPower": 0 },
+    { "id": "kubernetes-cluster", "category": "infra", "name": "Kubernetes Cluster", "baseCost": 200000, "locPerSecond": 600, "clickPower": 0 },
+    { "id": "serverless", "category": "infra", "name": "Serverless", "baseCost": 2000000, "locPerSecond": 2000, "clickPower": 0 }
+  ],
+  "defaultProfile": {
+    "companyName": "Garage Startup",
+    "avatar": "🎸",
+    "language": "en"
+  }
+}
