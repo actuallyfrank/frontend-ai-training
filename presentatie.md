@@ -48,12 +48,12 @@
 
 ### Slide 0.4: Doe dit nu: start je baseline
 1. Open de repo `rockstars-it-clicker`
-2. Kopieer `SCORECARD.template.md` naar `SCORECARD.md`
+2. Kopieer de scorecard (`opdrachten/scorecard.md`) naar een plek **buiten** de repo
 3. `git tag -f voor-run`
 4. Open een **verse** agent-sessie, plak de inhoud van `TASK.md`, druk op enter
 5. Laat hem lopen. **Niet ingrijpen, niet corrigeren.**
 
-*Notities:* Hier hoort een QR-code of korte link naar `opdrachten.md`. Check dat auto-accept edits aan staat, anders zitten ze te klikken. Shell commands blijven op approve: als de agent `npm install <iets>` wil, mogen ze dat goedkeuren maar moeten ze het noteren. De agent draait nu ~5–10 min terwijl jij blok 1 vertelt. Check ook of persoonlijke instructies uit staan (stond in de mail vooraf). Die maken de baseline anders "te goed".
+*Notities:* Hier hoort een QR-code of korte link naar de map `opdrachten/` (die staat bewust niet in de oefen-repo: de agent zou de conventies anders kunnen lezen). Check dat auto-accept edits aan staat, anders zitten ze te klikken. Shell commands blijven op approve: als de agent `npm install <iets>` wil, mogen ze dat goedkeuren maar moeten ze het noteren. De agent draait nu ~5–10 min terwijl jij blok 1 vertelt. Check ook of persoonlijke instructies uit staan (stond in de mail vooraf). Die maken de baseline anders "te goed".
 
 ---
 
@@ -128,11 +128,11 @@ Doel van de vraag: de groep merkt dat niet alles een rule moet worden.
 
 ### Slide 1a.1: Opdracht 1a: hoe deed je agent het?
 - Stop je agent als hij nog bezig is
-- Loop `SCORECARD.md` door → kolom **baseline**
+- Loop je scorecard door → kolom **baseline**
 - Noteer: welke fout verraste je het meest?
 - Daarna: `git reset --hard voor-run && git clean -fd` + sessie sluiten
 
-*Notities:* Zie `opdrachten.md`, Opdracht 1a. Loop rond en vraag mensen naar hun score. Verwachting: 2–4 van de 8 goed. Noteer een paar scores op het bord voor de afsluiting.
+*Notities:* Zie `opdrachten/01-stap-1-agents-md.md` (1a) en de trainer-uitwerking `opdrachten/trainer/01-stap-1-uitwerking.md`. Loop rond en vraag mensen naar hun score. Verwachting: 2–4 van de 8 goed. Noteer een paar scores op het bord voor de afsluiting.
 
 **Onthulling na het scoren:** "Deze repo zit midden in een migratie, net als die van jullie. `features/shop/` is legacy, `features/profile/` doet het goed. Waar keek jullie agent naar?" Meestal naar `shop/`, want daar landde de taak. Wie heeft `Card highlighted` gevonden? Wie wist dat de spotlight-kleur `--rs-spotlight` heet? Dat is het punt: **bestaande code is ook context, en vaak sterker dan je instructie.** Jullie weten welk deel de waarheid is, de agent niet. Is het bij iemand toch goed gegaan? Prima. Die verschillen in de zaal laten zien dat de agent "soms werkt", en dat is het probleem van vandaag.
 
@@ -258,7 +258,7 @@ Bespreek met je buur: wat blijft, wat gaat eruit?
 - Test: verse sessie → "Hoe haal ik data op in dit project, en welke docs heb je gelezen?"
 - Commit je werk!
 
-*Notities:* Zie `opdrachten.md`, Opdracht 1b. Hard stop na 20 min. Wie niet klaar is, kan instappen via branch `stap-1-agents-md`.
+*Notities:* Zie `opdrachten/01-stap-1-agents-md.md` (1b) en `opdrachten/trainer/01-stap-1-uitwerking.md`. Hard stop na 20 min. Wie niet klaar is, kan instappen via branch `stap-1-agents-md`.
 
 ---
 
@@ -385,7 +385,7 @@ Why: consistent styling, focus states and a11y are built into ui/.
 - Commit, `git tag -f voor-run`, verse sessie, `TASK.md` opnieuw → scorecard kolom **rules**
 - Vraag de agent welke rules hij heeft toegepast, en **controleer de claim**
 
-*Notities:* Zie `opdrachten.md`, Opdracht 2. Hard stop na 22 min. Checkpoint: `stap-2-rules`. Let tijdens het rondlopen op mensen die een "geclaimd maar niet gedaan" vinden, en vraag ze om dat in de afsluiting te delen.
+*Notities:* Zie `opdrachten/02-stap-2-rules.md` en `opdrachten/trainer/02-stap-2-uitwerking.md`. Hard stop na 22 min. Checkpoint: `stap-2-rules`. Let tijdens het rondlopen op mensen die een "geclaimd maar niet gedaan" vinden, en vraag ze om dat in de afsluiting te delen.
 
 ---
 
@@ -508,7 +508,7 @@ CI (dezelfde checks, kan niet overgeslagen worden)
 3. Commit, `git tag -f voor-run`, verse sessie: laat de agent `TASK.md` uitvoeren **én committen**
 4. Zie je de hook falen → de agent die zichzelf herstelt? Scorecard kolom **enforce**
 
-*Notities:* Zie `opdrachten.md`, Opdracht 3. Checkpoint: `stap-3-enforce`. Stretch: dezelfde lint als agent hook.
+*Notities:* Zie `opdrachten/03-stap-3-enforce.md` en `opdrachten/trainer/03-stap-3-uitwerking.md` (incl. de opties voor het legacy-conflict). Checkpoint: `stap-3-enforce`. Stretch: dezelfde lint als agent hook.
 
 ---
 
@@ -543,7 +543,7 @@ CI (dezelfde checks, kan niet overgeslagen worden)
 - Specs = **wat** we bouwen
 - OpenSpec-flow: `propose` → specs + design + tasks → `apply` → `archive`
 - Elke change krijgt een eigen map: `openspec/changes/<naam>/` met `proposal.md`, `specs/`, `design.md`, `tasks.md`
-- → Bonusopdracht in `opdrachten.md`
+- → Bonusopdracht in `opdrachten/04-bonus-openspec.md`
 
 *Notities:* Installatie: `npm install -g @fission-ai/openspec@latest` (Node ≥ 20.19), daarna `openspec init`. De slash commands verschillen per tool: in Claude Code `/opsx:propose`, `/opsx:apply`, `/opsx:archive`, in Copilot `/opsx-propose` enzovoort. Positioneer het als een logische volgende stap: eerst goede context, dan spec-driven werken. Plan mode in je tool is een lichte vorm hiervan, maar een plan verdwijnt na de sessie terwijl een spec in de repo blijft.
 

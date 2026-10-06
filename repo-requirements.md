@@ -95,8 +95,7 @@ rockstars-it-clicker/
 ├── CONTRIBUTING.md               # echte conventies, in proza
 ├── TASK.md
 ├── TASK-BONUS.md
-├── SCORECARD.template.md
-├── .gitignore                    # incl. SCORECARD.md
+├── .gitignore
 ├── .github/workflows/ci.yml
 ├── package.json                  # workspaces + scripts (geen lefthook)
 ├── web/
@@ -356,8 +355,8 @@ As a player I want to see how my company ranks against my colleagues.
 
 ## 11. Overige starter-bestanden
 
-- **`SCORECARD.template.md`:** het sjabloon uit `opdrachten.md`.
-- **`.gitignore`:** `node_modules`, `dist`, `SCORECARD.md`.
+- **Géén workshopmateriaal in de repo.** De scorecard, opdrachtteksten en trainer-uitwerkingen noemen de conventies en zouden de agent context geven. Ze staan in de workshop-repo onder `opdrachten/` en worden apart gedeeld.
+- **`.gitignore`:** `node_modules`, `dist`, `coverage`.
 - **Niet aanwezig:** `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.github/instructions/`, `.github/hooks/`, `.claude/`, `.cursorrules`, `docs/ai/`, `lefthook.yml`, `openspec/`.
 
 ---

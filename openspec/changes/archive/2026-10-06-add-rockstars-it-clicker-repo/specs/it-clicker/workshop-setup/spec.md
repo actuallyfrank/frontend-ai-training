@@ -51,15 +51,15 @@ The `main` branch SHALL NOT contain `AGENTS.md`, `CLAUDE.md`, `.github/copilot-i
 - **THEN** none of the listed agent instruction files or directories exist
 
 ### Requirement: Workshop starter files
-The repo root SHALL contain `TASK.md` (the shop filter + wishlist ticket, product language, no technical hints), `TASK-BONUS.md` (leaderboard), `SCORECARD.template.md` (the scorecard from `opdrachten.md`), and a `.gitignore` that ignores `SCORECARD.md`.
+The repo root SHALL contain `TASK.md` (the shop filter + wishlist ticket, product language, no technical hints) and `TASK-BONUS.md` (leaderboard). Workshop materials that name the conventions (assignment texts, scorecard, trainer notes) SHALL NOT be in the repo, because an agent could read them; they live in the workshop repo under `opdrachten/` and are shared separately.
 
 #### Scenario: Task touches every convention
 - **WHEN** a reviewer maps the lines of `TASK.md` to the conventions
 - **THEN** every one of the eight conventions is triggered by at least one requirement in the task
 
-#### Scenario: Scorecard survives reset
-- **WHEN** a participant copies the template to `SCORECARD.md`, fills it in and runs `git reset --hard && git clean -fd`
-- **THEN** `SCORECARD.md` still exists
+#### Scenario: No spoilers in the repo
+- **WHEN** a reviewer lists the files on `main`
+- **THEN** there is no scorecard, assignment text or trainer material
 
 ### Requirement: Tooling state
 The repo SHALL provide root scripts `dev`, `lint`, `lint:css`, `typecheck` and `test`, all passing on `main`. ESLint and Stylelint SHALL be configured without the restrictive rules participants add in the workshop (no restricted globals/imports/syntax, no `color-no-hex`). No git-hook tooling SHALL be installed or configured: `lefthook` SHALL NOT be a dependency (participants install and configure it themselves in exercise 3), and `npm install` SHALL NOT create a lefthook config or git hooks. A CI workflow SHALL run lint, lint:css, typecheck and test.

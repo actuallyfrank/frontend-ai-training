@@ -9,7 +9,7 @@ The workshop "Context engineering voor front-end developers" (see `presentatie.m
 - New practice app **Rockstars IT Clicker**: a light idle/cookie-clicker in which players earn *Lines of Code* and buy people, tools, culture and infra upgrades (React 19 + Vite front-end, small Express API, npm workspaces).
 - A deliberately **"mid-migration" codebase**: `features/shop/` is legacy (the workshop task lands there), `features/profile/` is the reference implementation; the rest (`clicker/`, `ui/`, `lib/`, `api/`) is clean.
 - **Eight planted conventions**, each with a good example and a lure, so that an agent without context fails on several of them (tokens, data via `api/`, `ui/` components, no new dependencies, i18n, test style, feature folders, a11y).
-- Workshop **starter files**: `TASK.md`, `TASK-BONUS.md` (leaderboard), `SCORECARD.template.md`, `CONTRIBUTING.md` (prose conventions), `README.md` (with an outdated styling section). No agent instruction files.
+- Workshop **starter files**: `TASK.md`, `TASK-BONUS.md` (leaderboard), `CONTRIBUTING.md` (prose conventions), `README.md` (with an outdated styling section). No agent instruction files.
 - **Tooling**: ESLint, Stylelint, Prettier, Vitest and CI configured *without* the restrictive rules participants will add. No git-hook tooling: participants install and configure `lefthook` themselves.
 - **Checkpoint solutions** (`stap-1-agents-md`, `stap-2-rules`, `stap-3-enforce`) that participants can switch to, plus an export step that produces a standalone git repo with those branches.
 - **Calibration** procedure and acceptance criteria to verify the baseline lands at ~2–4/8 correct and the rules checkpoint at ≥6/8.

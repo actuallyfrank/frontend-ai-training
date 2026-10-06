@@ -17,7 +17,7 @@
 1. `git switch <branch> && git tag -f voor-run`
 2. Verse sessie (Claude: nieuwe sessie / Copilot: nieuwe chat), auto-accept edits aan, shell op approve.
 3. Plak de inhoud van `TASK.md`. Niet ingrijpen.
-4. Scoor met de checks uit `SCORECARD.template.md` (1 punt per conventie).
+4. Scoor met de checks uit `opdrachten/scorecard.md` (1 punt per conventie).
 5. `git reset --hard voor-run && git clean -fd`
 
 ## Resultaten

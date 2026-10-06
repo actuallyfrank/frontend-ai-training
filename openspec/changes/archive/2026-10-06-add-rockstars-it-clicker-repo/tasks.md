@@ -2,7 +2,7 @@
 
 ## 1. Scaffolding and tooling
 
-- [x] 1.1 Create `rockstars-it-clicker/` with root `package.json` (npm workspaces `web`, `api`; scripts `dev`, `lint`, `lint:css`, `typecheck`, `test`; devDeps `concurrently`, `prettier`; **no** `lefthook`), `.gitignore` (incl. `SCORECARD.md`), `.prettierrc`. Verify `npm install` succeeds in `rockstars-it-clicker/`
+- [x] 1.1 Create `rockstars-it-clicker/` with root `package.json` (npm workspaces `web`, `api`; scripts `dev`, `lint`, `lint:css`, `typecheck`, `test`; devDeps `concurrently`, `prettier`; **no** `lefthook`), `.gitignore`, `.prettierrc`. Verify `npm install` succeeds in `rockstars-it-clicker/`
 - [x] 1.2 Scaffold `web/` (Vite + React 19 + TS strict, React Router, react-i18next, Vitest + Testing Library + user-event + jsdom, Vite proxy `/api` → `:3000`, ports via env). Verify `npm run dev -w web` serves a placeholder page on 5173 and `npm test -w web` runs an empty suite
 - [x] 1.3 Scaffold `api/` (Express + TS + Zod, `tsx watch`, Vitest + supertest, folders `routes/ services/ schemas/ data/`). Verify `npm run dev -w api` listens on 3000 and a placeholder health test passes
 - [x] 1.4 Add base ESLint flat config (typescript-eslint, react-hooks; no restricted rules) and Stylelint (`stylelint-config-standard`; no `color-no-hex`). Verify `npm run lint` and `npm run lint:css` pass
@@ -42,7 +42,7 @@
 - [x] 5.1 Write `README.md` (what the app is, install/dev/test commands, ports, and an outdated "Styling" section saying colours live in `src/styles/theme.ts`). Verify the documented commands work as written
 - [x] 5.2 Write `CONTRIBUTING.md` (~2 pages of prose: git workflow, release notes, and the eight conventions woven in, naming `features/profile` as "how we write features now"). Verify all eight conventions are mentioned (checklist review) and no bullet-list rules section exists
 - [x] 5.3 Add `TASK.md` and `TASK-BONUS.md` with the exact texts from `repo-requirements.md` §9–§10. Verify the trigger table: every convention is hit by at least one TASK line
-- [x] 5.4 Add `SCORECARD.template.md` (from `opdrachten.md`). Verify that `SCORECARD.md` survives `git reset --hard && git clean -fd` in a temp clone
+- [x] 5.4 Keep the scorecard **out** of the practice repo (it names the conventions and would leak context); it lives in `opdrachten/scorecard.md` in the workshop repo. Verify the audit asserts no scorecard/assignment files in the repo
 - [x] 5.5 Run the workshop-setup audit (also asserting: no ESLint suppressions file, no lint-ignore for the shop) on `rockstars-it-clicker/`: none of the forbidden agent files exist, all lures present (grep for `fetch(` in shop, `theme` import, hex in `shop.css`, `getByTestId`, clickable div), reference examples present. Verify by a scripted check `scripts/audit-practice-repo.sh` that exits 0
 
 ## 6. Checkpoint overlays

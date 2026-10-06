@@ -37,7 +37,7 @@ mkdir -p "$TARGET"
 TARGET="$(cd "$TARGET" && pwd)"
 
 copy_tree() {
-  rsync -a --exclude node_modules --exclude dist --exclude coverage --exclude SCORECARD.md \
+  rsync -a --exclude node_modules --exclude dist --exclude coverage \
     --exclude .delete "$1/" "$2/"
 }
 

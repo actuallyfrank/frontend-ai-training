@@ -55,7 +55,7 @@ check "empty wishlist feature folder" test -f web/src/features/wishlist/index.ts
 check "no useWishlist / useUpgrades hook" bash -c "! ls web/src/api | grep -qiE 'wishlist|upgrades'"
 
 echo "Workshop documents"
-for file in README.md CONTRIBUTING.md TASK.md TASK-BONUS.md SCORECARD.template.md; do
+for file in README.md CONTRIBUTING.md TASK.md TASK-BONUS.md; do
   check "present: $file" test -f "$file"
 done
 check "README styling section points to theme.ts" grep -q "src/styles/theme.ts" README.md
@@ -63,7 +63,7 @@ for term in tokens.css "api/client.ts" "web/src/ui/" "web/src/lib/" "en.json" "d
   check "CONTRIBUTING mentions $term" grep -qF "$term" CONTRIBUTING.md
 done
 check "CONTRIBUTING has no bullet-list rules" bash -c "! grep -qE '^\s*[-*] ' CONTRIBUTING.md"
-check ".gitignore ignores SCORECARD.md" grep -qx "SCORECARD.md" .gitignore
+check "no workshop materials in the repo (scorecard, opdrachten)" bash -c "! ls | grep -qiE 'scorecard|opdracht|calibration|presentatie'"
 
 echo
 if [ "$failures" -eq 0 ]; then
