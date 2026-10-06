@@ -47,7 +47,7 @@
 *Notities:* Herkenbaar beeld. Vraag aan de zaal: "Wie heeft de agent deze week iets gecorrigeerd dat hij vorige week ook al fout deed?" Handen tellen. Dat is het probleem van vandaag.
 
 ### Slide 0.4: Doe dit nu: start je baseline
-1. Open de repo `rockstars-events`
+1. Open de repo `rockstars-it-clicker`
 2. Kopieer `SCORECARD.template.md` naar `SCORECARD.md`
 3. `git tag -f voor-run`
 4. Open een **verse** agent-sessie, plak de inhoud van `TASK.md`, druk op enter
@@ -104,13 +104,13 @@
 
 ### Slide 1.6: Scenario: welke trede?
 Bespreek met je buur (1 min):
-1. De agent installeert steeds `date-fns`, terwijl jullie een eigen datum-helper in `lib/` hebben.
+1. De agent installeert steeds `numeral` om getallen als "1.2M" te tonen, terwijl jullie een eigen `compact()` in `lib/` hebben.
 2. De agent geeft component-props elke keer net andere namen (`onClose`, `handleClose`, `closeCallback`).
 3. De agent zet overal `any` als hij een type niet snapt.
 4. De agent heeft één keer een verkeerde endpoint-URL gebruikt.
 
 *Notities (antwoorden):*
-1. **Rule, en daarna enforce.** Eerst een rule ("no new deps; utils in `lib/`"). Gebeurt het toch, dan `no-restricted-imports` voor `date-fns`/`moment`/`dayjs` met een melding die naar jullie eigen helper verwijst. Shell-approve voor `npm install` is ook een vangnet.
+1. **Rule, en daarna enforce.** Eerst een rule ("no new deps; utils in `lib/`"). Gebeurt het toch, dan `no-restricted-imports` voor `numeral`/`pretty-ms`/`humanize-duration` met een melding die naar `compact()` verwijst. Shell-approve voor `npm install` is ook een vangnet.
 2. **Rule met voorbeelden.** Naamgeving is moeilijk objectief te checken. Geef een conventie + goed/fout-voorbeeld ("callbacks: `on<Event>`").
 3. **Enforce, en dat kan al.** TS `strict` + `@typescript-eslint/no-explicit-any`. Een rule erover schrijven is zonde van je context.
 4. **Fix it.** Eenmalig. Gebeurt het vaker, dan klopt er iets niet in je API-client of docs.
@@ -134,7 +134,7 @@ Doel van de vraag: de groep merkt dat niet alles een rule moet worden.
 
 *Notities:* Zie `opdrachten.md`, Opdracht 1a. Loop rond en vraag mensen naar hun score. Verwachting: 2–4 van de 8 goed. Noteer een paar scores op het bord voor de afsluiting.
 
-**Onthulling na het scoren:** "Deze repo zit midden in een migratie, net als die van jullie. `features/events/` is legacy, `features/profile/` doet het goed. Waar keek jullie agent naar?" Meestal naar `events/`, want daar landde de taak. Dat is het punt: **bestaande code is ook context, en vaak sterker dan je instructie.** Jullie weten welk deel de waarheid is, de agent niet. Is het bij iemand toch goed gegaan? Prima. Die verschillen in de zaal laten zien dat de agent "soms werkt", en dat is het probleem van vandaag.
+**Onthulling na het scoren:** "Deze repo zit midden in een migratie, net als die van jullie. `features/shop/` is legacy, `features/profile/` doet het goed. Waar keek jullie agent naar?" Meestal naar `shop/`, want daar landde de taak. Wie heeft `Card highlighted` gevonden? Wie wist dat de spotlight-kleur `--rs-spotlight` heet? Dat is het punt: **bestaande code is ook context, en vaak sterker dan je instructie.** Jullie weten welk deel de waarheid is, de agent niet. Is het bij iemand toch goed gegaan? Prima. Die verschillen in de zaal laten zien dat de agent "soms werkt", en dat is het probleem van vandaag.
 
 ---
 
@@ -171,7 +171,8 @@ Doel van de vraag: de groep merkt dat niet alles een rule moet worden.
 ```md
 # AGENTS.md
 
-Rockstars Events: event listing app. `web/` = front-end, `api/` = Node API.
+Rockstars IT Clicker: idle clicker game (earn Lines of Code, hire devs).
+`web/` = React front-end, `api/` = Node API.
 
 ## Commands
 - `npm run dev`: start web + api
@@ -184,7 +185,7 @@ Rockstars Events: event listing app. `web/` = front-end, `api/` = Node API.
 
 ## Reference implementation
 Copy patterns from `web/src/features/profile/`.
-`web/src/features/events/` is legacy (migration in progress): do not copy it.
+`web/src/features/shop/` is legacy (migration in progress): do not copy it.
 
 ## Docs index (read the relevant file before you start)
 - docs/ai/styling.md: tokens, theming, spacing
@@ -236,9 +237,9 @@ Wat een agent niet uit de code haalt, maar jij wel weet:
 - Project structure:
   - src/
     - features/
-      - events/
-        - EventList.tsx
-        - EventList.test.tsx
+      - shop/
+        - ShopPage.tsx
+        - UpgradeCard.tsx
         ... (80 regels boom)
 - Colors: always use var(--rs-*) tokens, never hex.
 ```
@@ -273,7 +274,7 @@ Bespreek met je buur: wat blijft, wat gaat eruit?
 ### Slide 3.2: Anatomie van een goede rule
 ```md
 ## STYLE-01: Only design tokens for color and spacing
-Scope: web/src/**/*.{css,scss,tsx,ts}
+Scope: `web/src/**/*.{css,tsx}`
 
 Use CSS custom properties from `web/src/styles/tokens.css` for every
 color, spacing and radius value. Never use hex, rgb(), hsl() or raw px
@@ -281,7 +282,7 @@ for spacing.
 
 Why: we support dark mode and white-label themes; hardcoded values break both.
 
-✅ color: var(--rs-ink-500); padding: var(--rs-space-3);
+✅ color: var(--rs-amp-300); padding: var(--rs-space-3);
 ❌ color: #6b7280; padding: 12px;
 ```
 - **ID**: zodat je ernaar kunt verwijzen en kunt verifiëren
@@ -351,14 +352,14 @@ Daarna:
 - **Niet geladen**: verkeerde scope/glob, of de agent opende het doc niet
 - **Conflict met bestaande code**: de agent kopieert het legacy-component dat ernaast staat
 
-*Notities:* Het laatste punt is het lastigst: code is ook context, en vaak sterker dan je instructie. Oplossingen: een reference implementation aanwijzen ("copy patterns from `features/profile/`"), legacy expliciet benoemen ("`features/events/` is legacy, do not copy"), opruimen, of enforcen. In de oefen-repo hebben ze dit bij de baseline zelf gezien.
+*Notities:* Het laatste punt is het lastigst: code is ook context, en vaak sterker dan je instructie. Oplossingen: een reference implementation aanwijzen ("copy patterns from `features/profile/`"), legacy expliciet benoemen ("`features/shop/` is legacy, do not copy"), opruimen, of enforcen. In de oefen-repo hebben ze dit bij de baseline zelf gezien.
 
 ### Slide 3.8: Scenario: waarom wordt deze rule genegeerd?
 ```md
 (AGENTS.md, regel 312)
 - Try to use the shared components where possible.
 ```
-En de agent werkt in `web/src/features/events/`, waar alle componenten eigen `<button className="btn">`- en `<div className="card" onClick=…>`-elementen gebruiken.
+En de agent werkt in `web/src/features/shop/`, waar upgrades gekocht worden via een `<div className="upgrade-card" onClick=…>` en knoppen eigen `<button className="btn">`-elementen zijn.
 
 Bespreek met je buur: waarom gaat dit mis, en hoe herschrijf je het?
 
@@ -367,7 +368,7 @@ Bespreek met je buur: waarom gaat dit mis, en hoe herschrijf je het?
 ## UI-01: Use components from web/src/ui/
 Buttons, inputs and cards come from `web/src/ui/` (Button, Input, Card).
 Missing a variant? Extend ui/ instead of styling native elements ad hoc.
-`features/events/` is legacy: do not copy its markup. Reference: `features/profile/`.
+`features/shop/` is legacy: do not copy its markup. Reference: `features/profile/`.
 Why: consistent styling, focus states and a11y are built into ui/.
 ✅ <Button variant="primary" onClick={save}>…</Button>
 ❌ <div className="btn" onClick={save}>…</div>
@@ -454,8 +455,9 @@ Why: consistent styling, focus states and a11y are built into ui/.
     }],
     'no-restricted-imports': ['error', {
       patterns: [{
-        group: ['date-fns', 'moment', 'dayjs'],
-        message: 'No date libraries. Use formatEventMoment from web/src/lib/time.ts.',
+        group: ['numeral', 'pretty-ms', 'humanize-duration'],
+        message: 'No formatting libraries. Use compact() from web/src/lib/numbers.ts ' +
+                 'or humanizeSeconds() from web/src/lib/time.ts.',
       }],
     }],
   },

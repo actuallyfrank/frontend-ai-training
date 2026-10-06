@@ -2,13 +2,13 @@
 
 > Je werkt **solo**, overleggen met je buren mag en wordt aangemoedigd.
 > Elke opdracht heeft een **hard stopmoment**. Niet klaar? Geen probleem: stap bij de volgende opdracht in via de checkpoint-branch.
-> Repo: `rockstars-events` (React + een kleine Node-API).
+> Repo: `rockstars-it-clicker`, een idle clicker-game in React met een kleine Node-API.
 
 ---
 
 ## Vooraf (thuis, ~10 min)
 
-1. Clone de repo `rockstars-events`
+1. Clone de repo `rockstars-it-clicker`
 2. `npm install` (in de root, installeert `web/` en `api/`)
 3. `npm run dev`: de app draait op `http://localhost:5173`, de API op `http://localhost:3000`
 4. Check dat je agent werkt: vraag hem een comment toe te voegen aan `web/src/main.tsx` en draai dat terug
@@ -109,14 +109,14 @@ git add -A && git diff --cached voor-run                      # volledige diff
    ```md
    ## STYLE-01: Only design tokens for color and spacing
 
-   Scope: web/src/\*_/_.{css,scss,tsx,ts}
+   Scope: `web/src/**/*.{css,tsx}`
 
    Use CSS custom properties from `web/src/styles/tokens.css` for every color,
    spacing and radius value. Never use hex, rgb(), hsl() or raw px for spacing.
 
    Why: we support dark mode and white-label themes; hardcoded values break both.
 
-   ✅ color: var(--rs-ink-500); padding: var(--rs-space-3);
+   ✅ color: var(--rs-amp-300); padding: var(--rs-space-3);
    ❌ color: #6b7280; padding: 12px;
    ```
 
@@ -180,8 +180,8 @@ Voorbeelden (in `web/eslint.config.js`):
     }],
     'no-restricted-imports': ['error', {
       patterns: [{
-        group: ['date-fns', 'moment', 'dayjs'],
-        message: 'No date libraries. Use formatEventMoment from src/lib/time.ts.',
+        group: ['numeral', 'pretty-ms', 'humanize-duration', 'date-fns'],
+        message: 'No formatting libraries. Use compact() from src/lib/numbers.ts or humanizeSeconds() from src/lib/time.ts.',
       }, {
         group: ['**/styles/theme'],
         message: 'theme.ts is deprecated. Use var(--rs-*) tokens from src/styles/tokens.css (see docs/ai/styling.md).',
@@ -202,7 +202,10 @@ Hex-kleuren in CSS, met Stylelint (`web/.stylelintrc.json`):
         "message": "Use var(--rs-*) tokens from src/styles/tokens.css instead of hex (see docs/ai/styling.md)."
       }
     ]
-  }
+  },
+  "overrides": [
+    { "files": ["src/styles/tokens.css"], "rules": { "color-no-hex": null } }
+  ]
 }
 ```
 
@@ -339,11 +342,11 @@ Meest verrassende fout bij baseline: **************\_\_**************
 | 1   | Kleuren/spacing via tokens (`tokens.css`, `var(--rs-*)`)                 | `git add -A && git diff --cached voor-run -- web \| grep -E '^\+.*(#[0-9a-fA-F]{3,8}\b\|rgb\(\|[0-9]+px\|theme)'` + bestaan gebruikte tokens echt in `tokens.css`? |          |       |         |
 | 2   | Data via `src/api/` (geen `fetch` in component)           | `git add -A && git diff --cached voor-run -- web/src/features \| grep -E '^\+.*fetch\('`                                                             |          |       |         |
 | 3   | UI-componenten uit `src/ui/` (Button, Input, Card)                       | Diff lezen: native `<button>`/`<input>` met eigen styling?                                                                                                         |          |       |         |
-| 4   | Geen nieuwe dependencies (utils uit `src/lib/`, bv. `formatEventMoment`) | `git diff voor-run -- '*package.json'`                                                                                                                             |          |       |         |
+| 4   | Geen nieuwe dependencies (utils uit `src/lib/`, bv. `compact`, `humanizeSeconds`) | `git diff voor-run -- '*package.json'`                                                                                                                             |          |       |         |
 | 5   | Alle UI-teksten via i18n                                                 | Diff lezen: hardcoded tekst in JSX? Nieuwe keys in `locales/`?                                                                                            |          |       |         |
 | 6   | Tests: `getByRole`/`getByLabelText`, gecoloceerd                         | `... \| grep -E 'getByTestId\|data-testid'` + staat de test naast de component (niet in `__tests__/`)?                                                             |          |       |         |
-| 7   | Nieuwe code in de juiste feature-map (niet in `src/components/`)         | `git add -A && git diff --cached voor-run --stat`                                                                                                                  |          |       |         |
-| 8   | a11y: labels bij inputs, echte buttons, toggle met `aria-pressed`        | Diff lezen: `<div onClick` / `(click)` op div? input zonder label? favoriet-knop zonder `aria-pressed`/label?                                                      |          |       |         |
+| 7   | Nieuwe code in de juiste feature-map (wishlist-logica in `features/wishlist/`, niet in `components/Header.tsx`) | `git add -A && git diff --cached voor-run --stat`                                                                                                                  |          |       |         |
+| 8   | a11y: labels bij inputs, echte buttons, toggle met `aria-pressed`        | Diff lezen: `<div onClick`? input zonder label? ster-knop zonder `aria-pressed`/toegankelijke naam?                                                      |          |       |         |
 |     | **Totaal (van 8)**                                                       |                                                                                                                                                                    |          |       |         |
 
 ## Geclaimd maar niet gedaan (opdracht 2)
@@ -357,132 +360,6 @@ Meest verrassende fout bij baseline: **************\_\_**************
 
 ---
 
-## Repo-specificatie (input voor het genereren van de oefen-repo's)
+## Repo-specificatie
 
-> Deze sectie is voor de trainer. Op basis hiervan wordt de repo later gegenereerd.
-
-### Algemeen
-
-- **Eén repo:** `rockstars-events`, met React.
-- **Domein:** "Rockstars Events": een overzicht van events (meetups, workshops, talks) met lijst, detailpagina, favorieten en een profielpagina.
-- **Monorepo-opzet:** npm workspaces met `web/` en `api/`. Root-scripts:
-  - `dev` (web + api tegelijk)
-  - `lint` (ESLint)
-  - `lint:css` (Stylelint)
-  - `typecheck`
-  - `test`
-- **Taal in de repo:** Engels (code, docs, comments).
-- **Klein houden:** ~25–35 bronbestanden in `web/`, zodat deelnemers in 10 min een beeld hebben.
-
-### `web/`
-
-- Vite + React 19 + TypeScript `strict`
-- React Router
-- react-i18next
-- Vitest + @testing-library/react + user-event
-- ESLint (flat config, typescript-eslint) **zonder** de restricted-rules. Die schrijven deelnemers zelf.
-- Stylelint met basisconfig **zonder** `color-no-hex`
-- Prettier
-
-### `api/`
-
-- Node + Express (of Hono) + TypeScript, data in-memory (JSON-seed)
-- Endpoints:
-  - `GET /events` (optioneel query `category`)
-  - `GET /events/:id`
-  - `GET /favorites`
-  - `POST /favorites/:eventId`
-  - `DELETE /favorites/:eventId`
-  - `GET /profile`
-  - `PUT /profile`
-- Conventies (voor de stretch met geneste `api/AGENTS.md`):
-  - Zod-validatie op elke input
-  - Error-format `{ error: { code, message } }`
-  - Route-handlers dun, logica in `services/`
-
-### Uitgangspunt: een codebase midden in een migratie
-
-Een agent volgt (1) de code die het dichtst bij de taak staat, (2) zijn trainingsdata (`date-fns`, `fetch`, `getByTestId`, …) en (3) wat makkelijk vindbaar is. Daarom is de repo **realistisch rommelig**:
-
-- **`web/src/features/events/` is legacy.** `TASK.md` landt hier, en deze code overtreedt bijna alle conventies. De agent kopieert wat hij ziet.
-- **`web/src/features/profile/` is al gemigreerd.** Dit is de _reference implementation_: elke conventie zit erin. Een AGENTS.md kan ernaar verwijzen ("copy patterns from `features/profile/`, not from `features/events/`").
-- De conventies staan **alleen** in `CONTRIBUTING.md` (lang, in proza) en in de code van `profile/`. Er is geen instructiebestand.
-- **Niet overdrijven.** Er moet één duidelijk goed voorbeeld blijven, anders voelt het oneerlijk ("rigged") en heeft AGENTS.md niets om naar te verwijzen.
-- **Framing richting deelnemers** (na de baseline, slide 1a.1): "Deze repo zit midden in een migratie. Net als die van jullie."
-
-### `web/src/features/profile/` (reference)
-
-- Profielpagina: naam, taalvoorkeur, favoriete categorieën, opslaan via de API
-- Gebruikt: tokens, `useProfile`-hook via `api/`, `ui/Button` + `ui/Input` + `ui/Card`, `formatEventMoment` ("member since"), i18n, een gecoloceerde test met `getByRole`/`getByLabelText`, `aria-*` correct
-- API-endpoints erbij: `GET /profile`, `PUT /profile`
-
-### Geplante conventies + hoe de agent het fout gaat doen
-
-| #   | Conventie (de waarheid)                                                                        | Goed voorbeeld (`profile/`, gedeeld)                                                                                                                                                                    | Lokkertje (`events/`, legacy)                                                                                                                                                                                                                                                                   |
-| --- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Kleuren/spacing/radius alleen via tokens in `web/src/styles/tokens.css`                        | Tokens met **niet-raadbare namen**: `--rs-ink-*`, `--rs-surface-*`, `--rs-brand-pop` (= accent), `--rs-space-1..6`, `--rs-radius-*`, plus een dark-mode-variant. Geen token heet `accent` of `primary`. | `web/src/styles/theme.ts` (deprecated, maar nog geïmporteerd door `events/`) met hex-constanten zoals `ACCENT = '#ff4f6d'`. `events/`-CSS heeft hex-kleuren en px-spacing. De taak vraagt de "accent color", dus de agent verzint `var(--color-accent)`, zet een hex, of importeert `theme.ts`. |
-| 2   | Data alleen via `web/src/api/` (`apiClient` + hooks) | `useProfile`, met een loading/error-patroon                                                                                                                                          | `EventList` doet zelf `fetch('/api/events')`. Een hook voor favorieten bestaat **nog niet**, dus de agent bouwt hem naar het voorbeeld ernaast.                                                                                          |
-| 3   | UI-componenten uit `web/src/ui/` (uitbreiden als iets ontbreekt)                               | `ui/Button` (variants), `ui/Input` (label is verplichte prop), `ui/Card`                                                                                                                                | `events/` gebruikt native `<button className="btn">`. `ui/Button` heeft **geen toggle-variant**: de juiste aanpak is `ui/` uitbreiden (`pressed`-prop), het lokkertje is een eigen knop.                                                                                                        |
-| 4   | Geen nieuwe dependencies, utils in `web/src/lib/`                                              | `web/src/lib/time.ts` met `formatEventMoment(date, 'compact' \| 'full')`. `'compact'` geeft precies "Tue 14 Oct, 19:00". Gebruikt in `profile/`.                                                        | `events/` formatteert handmatig met `toLocaleDateString` + string-concatenatie. De gevraagde notatie lokt `date-fns`/`dayjs` uit.                                                                                                                                                               |
-| 5   | Alle UI-teksten via i18n                                                                       | `profile/` + header gebruiken `t('…')`, keys in `web/src/locales/en.json` + `nl.json`, taalwisselaar in de header                                                                      | `events/` heeft hardcoded Engelse strings                                                                                                                                                                                                                                                       |
-| 6   | Tests gecoloceerd, `getByRole`/`getByLabelText`, geen test-ids                                 | `ProfileForm.test.tsx` naast de component                                                                                                                            | `web/src/features/events/__tests__/EventList.test.tsx` met `getByTestId` + `data-testid` in de markup                                                                                                                                                                                           |
-| 7   | Feature-folders: `features/<naam>/`, gedeeld in `ui/`, `lib/`, `api/`                          | `features/profile/`, `features/favorites/` (leeg, alleen `index.ts`)                                                                                                                                    | Legacy-map `web/src/components/` met `Header.tsx` en `Spinner.tsx`. De favorieten-teller in de header belandt daar makkelijk, of in `events/`.                                                                                                                                                  |
-| 8   | a11y: echte buttons/links, labels, toggle met `aria-pressed`                                   | `ui/Input` dwingt een label af, `ui/Button` is een `<button>`                                                                                                                                           | De legacy event-card heeft `<div className="card" onClick>` voor de detail-navigatie. Een favoriet-toggle zonder `aria-pressed`/label is de standaardfout.                                                                                                                                      |
-
-### Overige valkuil-versterkers
-
-- **Verouderde README-sectie "Styling":** "Colors live in `theme.ts`." Klopt niet meer, maar het bestand bestaat nog (deprecated). Versterkt lokkertje 1.
-- **`CONTRIBUTING.md`:** bevat de echte conventies, maar verspreid in proza over ~2 pagina's, tussen git-workflow en release-info. Noemt `profile/` als voorbeeld. Een agent opent dit zelden uit zichzelf, en dat is realistisch. Bron om te destilleren in opdracht 1b.
-- **Comments:**
-  - `theme.ts` krijgt `// @deprecated: use tokens.css`. Dat is subtiel en wordt vaak gemist.
-  - `events/` krijgt `// TODO: migrate to new patterns (see profile/)`, maar níét "do not copy".
-- **Geen** hints in de buurt van de taak die de conventie letterlijk voorzeggen.
-
-### Starter-bestanden in de root
-
-- `TASK.md` (Engels), geschreven als PO-ticket in producttaal, **zonder technische hints**:
-
-  > **Filter & favorite events**
-  > As a visitor I want to find events quickly and keep track of the ones I like.
-  >
-  > - Above the event list, add a search field (searches titles) and a category dropdown.
-  > - Each event card gets a favorite (heart) button. Favorites are saved, so they're still there after a reload.
-  > - Favorited cards get a border in our accent color.
-  > - Show the event date like "Tue 14 Oct, 19:00".
-  > - Show how many favorites I have in the header, next to the logo.
-  > - Please add tests for the filter and the favorite button.
-
-  **Triggers:** "accent color" (tokens/`theme.ts`), "saved" (API/fetch), "heart button" (`ui/` + a11y), datumnotatie (`date-fns`), "in the header" (`components/`), tests (`__tests__` + test-ids), en alle nieuwe teksten (i18n).
-
-- `TASK-BONUS.md`: "Event sign-up: visitors can sign up for an event from the detail page (name, email, dietary preferences), with validation and a confirmation message. The organiser needs the sign-ups stored." Raakt web + api (`POST /events/:id/signups`), geschikt voor OpenSpec.
-- `SCORECARD.template.md`: zie het sjabloon hierboven
-- `CONTRIBUTING.md` + `README.md`: zie valkuil-versterkers
-- `.gitignore` bevat `SCORECARD.md`
-- **Geen** `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`, `.github/instructions/`, `.claude/`, `.cursorrules` of `docs/ai/`
-- `.github/workflows/ci.yml`: `npm ci`, `lint`, `lint:css`, `typecheck`, `test`
-- lefthook in root-`devDependencies`, **niet** geconfigureerd (geen `lefthook.yml`, hooks niet geïnstalleerd)
-
-### Checkpoint-branches (voorbeeldoplossingen)
-
-| Branch             | Bevat                                                                                                                                                                                                                                                                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `stap-1-agents-md` | `AGENTS.md` (~60 regels) met index, en de regel "Reference implementation: `features/profile/`. `features/events/` is legacy, do not copy its patterns." Plus `docs/ai/styling.md` (met tokentabel: welke token voor welk doel, incl. `--rs-brand-pop` = accent), `docs/ai/data-fetching.md`, `docs/ai/testing.md`, `docs/ai/components.md` |
-| `stap-2-rules`     | + rules met ID's (STYLE-01, DATA-01, UI-01, DEPS-01, I18N-01, TEST-01, A11Y-01, STRUCT-01), path-scoped test-rule in alle drie de vormen, `Reporting`-sectie                                                                                                                                                                                |
-| `stap-3-enforce`   | + ESLint restricted-rules met instructieve meldingen (`fetch` in features, `date-fns`/`moment`/`dayjs`, import van `theme.ts`, hex in inline styles), Stylelint `color-no-hex`, `lefthook.yml` geconfigureerd, never-do `--no-verify`, voorbeeld-agent hook voor Claude Code en Copilot                                   |
-
-### Kalibratie (vóór de workshop, verplicht)
-
-- Draai de baseline (`TASK.md`, verse sessie, geen persoonlijke instructies) **3× met Claude Code en 3× met Copilot**, met de modellen die de deelnemers gebruiken.
-- **Streefwaarde:** gemiddeld **2–4 van de 8** goed bij de baseline, en **≥ 6 van de 8** op `stap-2-rules`.
-- **Bijsturen per conventie:**
-  - Gaat de agent bij de baseline steeds goed: maak het goede voorbeeld minder vindbaar, of maak het lokkertje sterker.
-  - Gaat het ook met `stap-2-rules` structureel fout: maak het goede voorbeeld duidelijker, of verbeter de voorbeeld-rule.
-- **Noteer de kalibratie-scores** voor de trainer. Ze zijn handig als vergelijking in de afsluiting.
-
-### Acceptatiecriteria voor de gegenereerde repo's
-
-- `npm install && npm run dev` werkt op een schone machine (Node LTS)
-- `npm run lint`, `typecheck` en `test` zijn groen op `main` (dus de legacy-code is wel lint-clean onder de basisconfig)
-- De kalibratie haalt de streefwaarden hierboven
-- Controleer dat `npm install` op `main` geen `lefthook.yml` en geen git hooks aanmaakt. Het npm-package van lefthook kan bij installatie automatisch `lefthook install` draaien. Gebeurt dat, pas dan de setup aan of laat de opdrachttekst er rekening mee houden.
-- Op `stap-3-enforce` blokkeert de pre-commit hook een commit met een hex-kleur, met `fetch` in een feature-component, en met een `date-fns`-import
+De volledige requirements voor de oefen-repo (concept, features, geplante valkuilen, API, `TASK.md`, `TASK-BONUS.md`, checkpoint-branches, kalibratie en acceptatiecriteria) staan in [`repo-requirements.md`](repo-requirements.md).
